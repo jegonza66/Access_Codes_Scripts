@@ -84,11 +84,11 @@ def get_old_file_colors(Old_file, Low_notification_old_path):
                 Cell_colours['Green'] = Cell_colours['Green'].append(Old_file.iloc[row - 1])
             elif bgx == 64:
                 Cell_colours['White'] = Cell_colours['White'].append(Old_file.iloc[row - 1])
-
         else:
             break
 
     return Cell_colours, colors
+
 
 def get_new_repeated(Old_file_books, New_file_books):
     # mark which cases are new and repeated

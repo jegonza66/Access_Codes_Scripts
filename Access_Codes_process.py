@@ -23,6 +23,7 @@ def run_low_no_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schoo
     # Change directory to Access-Codes where ruby
     Functions.ruby_directory(Credentials=Credentials)
 
+    print('\n\nTotal cases: {}\n'.format(len(Billing_ISBNs)))
     # Start run for
     for Billing_ISBN, VBID, quantity, School, Verba_School, Catalog, URL in zip(Billing_ISBNs, VBIDs, quantities, Schools,
                                                                            Verba_Schools, Catalogs, URLs):
@@ -93,6 +94,7 @@ def run_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verb
     # Change directory to Access-Codes where ruby
     Functions.ruby_directory(Credentials=Credentials)
 
+    print('\n\nTotal cases: {}\n'.format(len(Billing_ISBNs)))
     # Start run for
     for Billing_ISBN, VBID, quantity, School, Verba_School, Catalog in zip(Billing_ISBNs, VBIDs, quantities, Schools,
                                                                            Verba_Schools, Catalogs):
@@ -154,6 +156,7 @@ def run_fake_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools,
     Report = {'OK': [], 'Failed Import': [], 'Access Codes': [], 'URL': [], 'Access Codes and URL': [],
               'Run out of codes': []}
 
+    print('\n\nTotal cases: {}\n'.format(len(Billing_ISBNs)))
     # Start run for
     for Billing_ISBN, VBID, quantity, School, Verba_School, Catalog in zip(Billing_ISBNs, VBIDs, quantities, Schools,
                                                                            Verba_Schools, Catalogs):
