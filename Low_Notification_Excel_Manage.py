@@ -61,11 +61,12 @@ def get_old_file_colors(Old_file, Low_notification_old_path):
     rows, cols = sheet.nrows, sheet.ncols
 
     # Make dataframes from rows with different colours
+    columns = ['Login', 'Name', 'Billing Isbn', 'Access Code URL']
     Cell_colours = {}
-    Cell_colours['Red'] = pd.DataFrame()
-    Cell_colours['Blue'] = pd.DataFrame()
-    Cell_colours['Green'] = pd.DataFrame()
-    Cell_colours['White'] = pd.DataFrame()
+    Cell_colours['Red'] = pd.DataFrame(columns=columns)
+    Cell_colours['Blue'] = pd.DataFrame(columns=columns)
+    Cell_colours['Green'] = pd.DataFrame(columns=columns)
+    Cell_colours['White'] = pd.DataFrame(columns=columns)
     colors = []
 
     for row in range(1, rows):
