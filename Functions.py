@@ -147,18 +147,20 @@ def write_report(Report, save_path, process):
     new_dir = save_path + time.strftime('Access-Codes/%Y/%m/%d/Reports/')
     os.makedirs(new_dir, exist_ok=True)
     file_name = time.strftime(new_dir + '{} Report %H_%M.txt'.format(process))
-    text = 'The following {} files where correctly uploaded to connect: {}' \
-           '\n\nThe following {} files where generated correctly but could not be uploaded to connect: {}' \
+    text = 'The following {} files where correctly uploaded to connect:\n{}' \
+           '\n\nThe following {} files where generated correctly but could not be uploaded to connect:\n{}' \
            '\n\nThe following files where missing information, please contact triage after checking there ' \
            'where no previous request on the ISBNs.' \
-           '\n\n{}: Missing Access Codes and URL (# missing codes): {}' \
-           '\n\n{}: Missing Access Codes (# missing codes): {}' \
-           '\n\n{}: Missing URL: {}' \
-           '\n\n{}: Run out of Access Codes (# missing codes): {}'\
-        .format(len(Report['OK']), Report['OK'], len(Report['Failed Import']), Report['Failed Import'],
-                len(Report['Access Codes and URL']), Report['Access Codes and URL'], len(Report['Access Codes']),
-                Report['Access Codes'], len(Report['URL']), Report['URL'], len(Report['Run out of codes']),
-                Report['Run out of codes'])
+           '\n\n{}: Missing Access Codes and URL (# missing codes):\n{}' \
+           '\n\n{}: Missing Access Codes (# missing codes):\n{}' \
+           '\n\n{}: Missing URL:\n{}' \
+           '\n\n{}: Run out of Access Codes (# missing codes):\n{}'\
+        .format(len(Report['OK']), '\n'.join(str(line) for line in Report['OK']),
+                len(Report['Failed Import']), '\n'.join(str(line) for line in Report['Failed Import']),
+                len(Report['Access Codes and URL']), '\n'.join(str(line) for line in Report['Access Codes and URL']),
+                len(Report['Access Codes']), '\n'.join(str(line) for line in Report['Access Codes']),
+                len(Report['URL']), '\n'.join(str(line) for line in Report['URL']),
+                len(Report['Run out of codes']), '\n'.join(str(line) for line in Report['Run out of codes']))
 
     f = open(file_name, 'w')
     f.write(text)
@@ -166,21 +168,25 @@ def write_report(Report, save_path, process):
 
 
 def write_final_report(Report, save_path, process):
+    for key in Report.keys():
+        Report[key].sort()
     new_dir = save_path + time.strftime('Access-Codes/%Y/%m/%d/')
     os.makedirs(new_dir, exist_ok=True)
     file_name = time.strftime(new_dir + '{} Final Report %H_%M.txt'.format(process))
-    text = 'The following {} files where correctly uploaded to connect: {}' \
-           '\n\nThe following {} files where generated correctly but could not be uploaded to connect: {}' \
+    text = 'The following {} files where correctly uploaded to connect:\n{}' \
+           '\n\nThe following {} files where generated correctly but could not be uploaded to connect:\n{}' \
            '\n\nThe following files where missing information, please contact triage after checking there ' \
            'where no previous request on the ISBNs.' \
-           '\n\n{}: Missing Access Codes and URL (# missing codes): {}' \
-           '\n\n{}: Missing Access Codes (# missing codes): {}' \
-           '\n\n{}: Missing URL: {}' \
-           '\n\n{}: Run out of Access Codes (# missing codes): {}'\
-        .format(len(Report['OK']), Report['OK'], len(Report['Failed Import']), Report['Failed Import'],
-                len(Report['Access Codes and URL']), Report['Access Codes and URL'], len(Report['Access Codes']),
-                Report['Access Codes'], len(Report['URL']), Report['URL'], len(Report['Run out of codes']),
-                Report['Run out of codes'])
+           '\n\n{}: Missing Access Codes and URL (# missing codes):\n{}' \
+           '\n\n{}: Missing Access Codes (# missing codes):\n{}' \
+           '\n\n{}: Missing URL:\n{}' \
+           '\n\n{}: Run out of Access Codes (# missing codes):\n{}' \
+        .format(len(Report['OK']), '\n'.join(str(line) for line in Report['OK']),
+                len(Report['Failed Import']), '\n'.join(str(line) for line in Report['Failed Import']),
+                len(Report['Access Codes and URL']), '\n'.join(str(line) for line in Report['Access Codes and URL']),
+                len(Report['Access Codes']), '\n'.join(str(line) for line in Report['Access Codes']),
+                len(Report['URL']), '\n'.join(str(line) for line in Report['URL']),
+                len(Report['Run out of codes']), '\n'.join(str(line) for line in Report['Run out of codes']))
 
     f = open(file_name, 'w')
     f.write(text)

@@ -3,17 +3,18 @@ import numpy as np
 import BNC_DD_Load
 import Functions
 
-
 def run_code_reveal(Credentials):
     # Read DD file and take Code Reveal Cases
     DD_Code_Reveal, DD = BNC_DD_Load.DD_Code_Reveal()
 
     # Define Billing ISBN and VBIDS from SKU, exception only in case SKU contains R character
     Billing_ISBNs = list(DD_Code_Reveal['SKU.1'])
-    VBIDs = [Billing_ISBN if type(Billing_ISBN) == int else Billing_ISBN.split('R')[0] for Billing_ISBN in Billing_ISBNs]
+    VBIDs = [Billing_ISBN if type(Billing_ISBN) == int else Billing_ISBN.split('R')[0] for Billing_ISBN in
+             Billing_ISBNs]
 
     # Define quantities (rounding up), schools and catalogs from dataframe
-    quantities = np.ceil(np.round(DD_Code_Reveal['Total Estimated Enrollments']+5.1,-1)).astype(int)
+    quantities = [np.ceil(np.round(Total_Enrollments + 5.1, -1)).astype(int) if not np.isnan(Total_Enrollments) else 0
+                  for Total_Enrollments in DD_Code_Reveal['Total Estimated Enrollments']]
     Schools = DD_Code_Reveal['School'].values
     Catalogs = DD_Code_Reveal['Catalog'].values
 
@@ -36,10 +37,12 @@ def run_fake_code_reveal(Credentials, DD):
 
     # Define Billing ISBN and VBIDS from SKU, exception only in case SKU contains R character
     Billing_ISBNs = list(DD_Fake_Code_Reveal['SKU.1'])
-    VBIDs = [Billing_ISBN if type(Billing_ISBN) == int else Billing_ISBN.split('R')[0] for Billing_ISBN in Billing_ISBNs]
+    VBIDs = [Billing_ISBN if type(Billing_ISBN) == int else Billing_ISBN.split('R')[0] for Billing_ISBN in
+             Billing_ISBNs]
 
     # Define quantities (rounding up), schools and catalogs from dataframe
-    quantities = np.ceil(np.round(DD_Fake_Code_Reveal['Total Estimated Enrollments']+5.1,-1)).astype(int)
+    quantities = [np.ceil(np.round(Total_Enrollments + 5.1, -1)).astype(int) if not np.isnan(Total_Enrollments) else 0
+                  for Total_Enrollments in DD_Fake_Code_Reveal['Total Estimated Enrollments']]
     Schools = DD_Fake_Code_Reveal['School'].values
     Catalogs = DD_Fake_Code_Reveal['Catalog'].values
 

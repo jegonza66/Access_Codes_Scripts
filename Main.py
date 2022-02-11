@@ -4,7 +4,6 @@ import Paths_Credentials
 import Functions
 import Access_Codes_process
 
-
 # Ask for desired process to run (Daily Delta or Low Notification)
 process_todo = Functions.choose_process()
 
@@ -24,7 +23,8 @@ if process_todo == 'Daily Delta':
                                                               Verba_Schools=Verba_Schools, Catalogs=Catalogs,
                                                               Automatic_Verba_upload=Automatic_Verba_upload,
                                                               process_todo=process_todo + ' Code Reveal')
-    else: print('\nRun == False.\nLenght of ISBNs, quantities, URLs did not match. Please check excel files.')
+    else:
+        print('\nRun == False.\nLenght of ISBNs, quantities, URLs did not match. Please check excel files.')
 
     print('\nRuning Fake Code Reveal Cases\n')
     Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, run = \
@@ -34,7 +34,8 @@ if process_todo == 'Daily Delta':
                                                   quantities=quantities, Schools=Schools, Verba_Schools=Verba_Schools,
                                                   Catalogs=Catalogs, Automatic_Verba_upload=Automatic_Verba_upload,
                                                   driver=driver, process_todo=process_todo + ' Fake Code Reveal')
-    else: print('\nRun == False.\nLenght of ISBNs, quantities, URLs did not match. Please check excel files.')
+    else:
+        print('\nRun == False.\nLenght of ISBNs, quantities, URLs did not match. Please check excel files.')
 
 elif process_todo == 'Low Notification':
     Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, URLs, run = \
@@ -45,7 +46,8 @@ elif process_todo == 'Low Notification':
                                                      Catalogs=Catalogs, URLs=URLs,
                                                      Automatic_Verba_upload=Automatic_Verba_upload,
                                                      process_todo=process_todo)
-    else: print('\nRun == False.\nLenght of ISBNs, quantities, URLs did not match. Please check excel files.')
+    else:
+        print('\nRun == False.\nLenght of ISBNs, quantities, URLs did not match. Please check excel files.')
 
 elif process_todo == 'No Notification':
     Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, URLs, run = \
@@ -56,4 +58,5 @@ elif process_todo == 'No Notification':
                                                      Catalogs=Catalogs, URLs=URLs,
                                                      Automatic_Verba_upload=Automatic_Verba_upload,
                                                      process_todo=process_todo)
-    else: print('\nRun == False.\nLenght of ISBNs, quantities, URLs did not match. Please check excel files.')
+    else:
+        print('\nRun == False.\nLenght of ISBNs, quantities, URLs did not match. Please check excel files.')
