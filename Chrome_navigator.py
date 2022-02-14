@@ -210,7 +210,6 @@ def check_available_codes(driver, Verba_School, Catalog, ISBN):
                 Available_Codes = int(driver.find_element_by_xpath(xpath_codes).text)
                 print('{} Available codes'.format(Available_Codes))
             except:
-                print('Checking Again.')
                 # Check available Codes Again
                 try:
                     xpath_codes = '/ html / body / div[1] / div / div[1] / div / div[3] / div / div / div / div / div[1] / div[2] / span / div[1]'
