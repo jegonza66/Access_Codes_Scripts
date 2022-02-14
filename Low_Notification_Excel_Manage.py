@@ -37,21 +37,19 @@ def read_low_files():
           'and open it.\nRemember to change the extension to .xls.')
     Low_notification_new_path = filedialog.askopenfilename()
 
-    columns = ['Login', 'Name', 'Billing Isbn', 'Number Codes Needed', 'Access Code URL']
+    columns = ['Login', 'Name', 'Name.1', 'Title', 'Billing Isbn', 'Number Codes Needed', 'Access Code URL']
+    columns_no_codes = ['Login', 'Name', 'Name.1', 'Title', 'Billing Isbn', 'Access Code URL']
     Old_file = pd.read_excel(io=Low_notification_old_path)[columns]
     New_file = pd.read_excel(io=Low_notification_new_path)[columns]
     # Drop duplicated rows
     New_file.drop_duplicates(inplace=True)
     # Take only rows with bigger number of codes needed for repeated isbn schools and catalogs
-    New_file = New_file.sort_values('Number Codes Needed', ascending=False).drop_duplicates(
-        ['Login', 'Name', 'Billing Isbn', 'Access Code URL'], keep='first')
+    New_file = New_file.sort_values('Number Codes Needed', ascending=False).drop_duplicates(columns_no_codes,
+                                                                                            keep='first')
 
-    # Drop number of codes needed column
-    New_file_books = New_file.drop('Number Codes Needed', axis=1)
-    Old_file_books = Old_file.drop('Number Codes Needed', axis=1)
-    Old_file_books.drop_duplicates(inplace=True)
+    Old_file.drop_duplicates(inplace=True)
 
-    return Old_file, Old_file_books, New_file, New_file_books, Low_notification_old_path
+    return Old_file, New_file, Low_notification_old_path
 
 
 def get_old_file_colors(Old_file, Low_notification_old_path):
@@ -61,12 +59,13 @@ def get_old_file_colors(Old_file, Low_notification_old_path):
     rows, cols = sheet.nrows, sheet.ncols
 
     # Make dataframes from rows with different colours
-    columns = ['Login', 'Name', 'Billing Isbn', 'Access Code URL']
+    columns_no_codes = ['Login', 'Name', 'Name.1', 'Title', 'Billing Isbn', 'Access Code URL']
+
     Cell_colours = {}
-    Cell_colours['Red'] = pd.DataFrame(columns=columns)
-    Cell_colours['Blue'] = pd.DataFrame(columns=columns)
-    Cell_colours['Green'] = pd.DataFrame(columns=columns)
-    Cell_colours['White'] = pd.DataFrame(columns=columns)
+    Cell_colours['Red'] = pd.DataFrame(columns=columns_no_codes)
+    Cell_colours['Blue'] = pd.DataFrame(columns=columns_no_codes)
+    Cell_colours['Green'] = pd.DataFrame(columns=columns_no_codes)
+    Cell_colours['White'] = pd.DataFrame(columns=columns_no_codes)
     colors = []
 
     for row in range(1, rows):
@@ -91,9 +90,10 @@ def get_old_file_colors(Old_file, Low_notification_old_path):
     return Cell_colours, colors
 
 
-def get_new_repeated(Old_file_books, New_file_books):
+def get_new_repeated(Old_file, New_file):
+    columns_no_codes = ['Login', 'Name', 'Name.1', 'Title', 'Billing Isbn', 'Access Code URL']
     # mark which cases are new and repeated
-    common_right = Old_file_books.merge(New_file_books, on=['Login', 'Name', 'Billing Isbn', 'Access Code URL'], how='right',
+    common_right = Old_file.merge(New_file, on=columns_no_codes, how='right',
                                         indicator=True)
 
     # take new and repeated cases indexes
@@ -107,9 +107,11 @@ def get_new_repeated(Old_file_books, New_file_books):
 
 
 def append_not_red(new_cases, repeated_cases, Cell_colours):
+    columns_no_codes = ['Login', 'Name', 'Name.1', 'Title', 'Billing Isbn', 'Access Code URL']
+
     # Change this for check if not red
     try:
-        not_red = repeated_cases.merge(Cell_colours['Red'], on=['Login', 'Name', 'Billing Isbn', 'Access Code URL'], how='left',
+        not_red = repeated_cases.merge(Cell_colours['Red'], on=columns_no_codes, how='left',
                                        indicator=True)
         not_red_index = not_red['_merge'] == 'left_only'
         not_red = not_red[not_red_index]
@@ -123,10 +125,12 @@ def append_not_red(new_cases, repeated_cases, Cell_colours):
 
 
 def check_old_colors(repeated_cases, Cell_colours):
+    columns_no_codes = ['Login', 'Name', 'Name.1', 'Title', 'Billing Isbn', 'Access Code URL']
+
     # Check if repeated cases were in white in old file
     Common = {}
     if Cell_colours['White'].shape[0]:
-        common_white = repeated_cases.merge(Cell_colours['White'], on=['Login', 'Name', 'Billing Isbn', 'Access Code URL'], how='left',
+        common_white = repeated_cases.merge(Cell_colours['White'], on=columns_no_codes, how='left',
                                             indicator=True)
         common_white_index = common_white['_merge'] == 'both'
         common_white = common_white[common_white_index]
@@ -134,7 +138,7 @@ def check_old_colors(repeated_cases, Cell_colours):
 
     # Check if repeated cases were in green in old file
     if Cell_colours['Green'].shape[0]:
-        common_green = repeated_cases.merge(Cell_colours['Green'], on=['Login', 'Name', 'Billing Isbn', 'Access Code URL'], how='left',
+        common_green = repeated_cases.merge(Cell_colours['Green'], on=columns_no_codes, how='left',
                                             indicator=True)
         common_green_index = common_green['_merge'] == 'both'
         common_green = common_green[common_green_index]
@@ -142,7 +146,7 @@ def check_old_colors(repeated_cases, Cell_colours):
 
     # Check if repeated cases were in blue in old file
     if Cell_colours['Blue'].shape[0]:
-        common_blue = repeated_cases.merge(Cell_colours['Blue'], on=['Login', 'Name', 'Billing Isbn', 'Access Code URL'], how='left',
+        common_blue = repeated_cases.merge(Cell_colours['Blue'], on=columns_no_codes, how='left',
                                            indicator=True)
         common_blue_index = common_blue['_merge'] == 'both'
         common_blue = common_blue[common_blue_index]
@@ -150,7 +154,7 @@ def check_old_colors(repeated_cases, Cell_colours):
 
     # Check if repeated cases were in red in old file
     if Cell_colours['Red'].shape[0]:
-        common_red = repeated_cases.merge(Cell_colours['Red'], on=['Login', 'Name', 'Billing Isbn', 'Access Code URL'], how='left',
+        common_red = repeated_cases.merge(Cell_colours['Red'], on=columns_no_codes, how='left',
                                           indicator=True)
         common_red_index = common_red['_merge'] == 'both'
         common_red = common_red[common_red_index]

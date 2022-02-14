@@ -38,12 +38,12 @@ if process_todo == 'Daily Delta':
         print('\nRun == False.\nLenght of ISBNs, quantities, URLs did not match. Please check excel files.')
 
 elif process_todo == 'Low Notification':
-    Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, URLs, run = \
+    Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, Publishers, Titles, URLs, run = \
         Low_No_notification_setup.run_low_notification_setup(Credentials=Credentials)
     if run:
         Access_Codes_process.run_low_no_notification(Credentials=Credentials, Billing_ISBNs=Billing_ISBNs, VBIDs=VBIDs,
                                                      quantities=quantities, Schools=Schools, Verba_Schools=Verba_Schools,
-                                                     Catalogs=Catalogs, URLs=URLs,
+                                                     Catalogs=Catalogs, Publishers=Publishers, Titles=Titles, URLs=URLs,
                                                      Automatic_Verba_upload=Automatic_Verba_upload,
                                                      process_todo=process_todo)
     else:

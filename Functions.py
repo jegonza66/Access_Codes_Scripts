@@ -108,7 +108,7 @@ def ruby_directory(Credentials):
         os.chdir(Credentials['Ruby_path'])
 
 
-def check_file(df, quantity, URL):
+def check_file(df, csv_file, quantity, URL, Title):
     Error = False
 
     if not pd.isna(URL):
@@ -120,26 +120,34 @@ def check_file(df, quantity, URL):
     Missing_url = int(quantity - url_generated)
 
     if Missing_codes and Missing_url:
-        Error = 'Access Codes and URL'
+        Error = 'Missing Access Codes and URL'
         if codes_generated and codes_generated == url_generated:
             Error = 'Run out of codes'
             df = df.head(codes_generated)
+        if 'eVP' in Title:
+            print('eVP Title.\nChange codes column to message.')
+            df['Access Code'] = 'No access code is needed for this content, ' \
+                                'please navigate to the publisher integration via your LMS.'
+            Error = False
+            Missing_codes = 0
+            df.to_csv(csv_file)
+
     elif df['Access Code'].isnull().values.any():
-        Error = 'Access Codes'
+        Error = 'Missing Access Codes'
         if codes_generated:
             Error = 'Run out of codes'
             df = df.head(codes_generated)
     elif df['URL'].isnull().values.any():
-        Error = 'URL'
+        Error = 'Missing URL'
 
     return df, Error, Missing_codes
 
 
-def append_to_report(Report, File_imported, Error, Missing_codes, School, Catalog, Billing_ISBN, quantity):
+def append_to_report(Report, File_imported, Error, Missing_codes, School, Catalog, Publisher, Title, Billing_ISBN, quantity):
     if File_imported:
-        Report[File_imported].append([School, Catalog, Billing_ISBN, quantity-Missing_codes])
+        Report[File_imported].append([School, Catalog, Publisher, Title, Billing_ISBN, quantity-Missing_codes])
     else:
-        Report[Error].append([School, Catalog, Billing_ISBN, Missing_codes])
+        Report[Error].append([School, Catalog, Publisher, Title, Billing_ISBN, Missing_codes])
     return Report
 
 
@@ -147,20 +155,37 @@ def write_report(Report, save_path, process):
     new_dir = save_path + time.strftime('Access-Codes/%Y/%m/%d/Reports/')
     os.makedirs(new_dir, exist_ok=True)
     file_name = time.strftime(new_dir + '{} Report %H_%M.txt'.format(process))
-    text = 'The following {} files where correctly uploaded to connect:\n{}' \
-           '\n\nThe following {} files where generated correctly but could not be uploaded to connect:\n{}' \
-           '\n\nThe following files where missing information, please contact triage after checking there ' \
-           'where no previous request on the ISBNs.' \
-           '\n\n{}: Missing Access Codes and URL (# missing codes):\n{}' \
-           '\n\n{}: Missing Access Codes (# missing codes):\n{}' \
-           '\n\n{}: Missing URL:\n{}' \
-           '\n\n{}: Run out of Access Codes (# missing codes):\n{}'\
-        .format(len(Report['OK']), '\n'.join(str(line) for line in Report['OK']),
-                len(Report['Failed Import']), '\n'.join(str(line) for line in Report['Failed Import']),
-                len(Report['Access Codes and URL']), '\n'.join(str(line) for line in Report['Access Codes and URL']),
-                len(Report['Access Codes']), '\n'.join(str(line) for line in Report['Access Codes']),
-                len(Report['URL']), '\n'.join(str(line) for line in Report['URL']),
-                len(Report['Run out of codes']), '\n'.join(str(line) for line in Report['Run out of codes']))
+    text = ''
+    if len(Report['OK']):
+        text += 'The following {} files where correctly uploaded to connect:' \
+                '\n{}'.format(len(Report['OK']), '\n'.join(str(line) for line in Report['OK']))
+    if len(Report['Failed Import']):
+        text += '\n\nThe following {} files where generated correctly but could not be uploaded to connect:' \
+                '\n{}'.format(len(Report['Failed Import']),
+                              '\n'.join(str(line) for line in Report['Failed Import']))
+    if len(Report['Dismiss']):
+        text += '\n\nThe following {} requests where dismissed because already available codes:' \
+                '\n{}'.format(len(Report['Dismiss']), '\n'.join(str(line) for line in Report['Dismiss']))
+    if len(Report['Missing Access Codes and URL']):
+        text += '\n\nThe following {} files where missing Access Codes and URL (# missing codes):' \
+                '\n{}'.format(len(Report['Missing Access Codes and URL']),
+                              '\n'.join(str(line) for line in Report['Missing Access Codes and URL']))
+    if len(Report['Missing Access Codes']):
+        text += '\n\nThe following {} files where missing Access Codes (# missing codes):' \
+                '\n{}'.format(len(Report['Missing Access Codes']),
+                              '\n'.join(str(line) for line in Report['Missing Access Codes']))
+    if len(Report['Missing URL']):
+        text += '\n\nThe following {} files where missing URL:' \
+                '\n{}'.format(len(Report['Missing URL']), '\n'.join(str(line) for line in Report['Missing URL']))
+    if len(Report['Run out of codes']):
+        text += '\n\nThe following {} files Run out of Access Codes. Must upload and request missing codes:' \
+                '\n{}'.format(len(Report['Run out of codes']),
+                              '\n'.join(str(line) for line in Report['Run out of codes']))
+    if len(Report['eCampus Content Holding']):
+        text += '\n\nThe following {} files have eCampus Content Holding Publisher with no available codes.' \
+                '\nContact Maka for new codes:' \
+                '\n{}'.format(len(Report['eCampus Content Holding']),
+                              '\n'.join(str(line) for line in Report['eCampus Content Holding']))
 
     f = open(file_name, 'w')
     f.write(text)
@@ -173,20 +198,37 @@ def write_final_report(Report, save_path, process):
     new_dir = save_path + time.strftime('Access-Codes/%Y/%m/%d/')
     os.makedirs(new_dir, exist_ok=True)
     file_name = time.strftime(new_dir + '{} Final Report %H_%M.txt'.format(process))
-    text = 'The following {} files where correctly uploaded to connect:\n{}' \
-           '\n\nThe following {} files where generated correctly but could not be uploaded to connect:\n{}' \
-           '\n\nThe following files where missing information, please contact triage after checking there ' \
-           'where no previous request on the ISBNs.' \
-           '\n\n{}: Missing Access Codes and URL (# missing codes):\n{}' \
-           '\n\n{}: Missing Access Codes (# missing codes):\n{}' \
-           '\n\n{}: Missing URL:\n{}' \
-           '\n\n{}: Run out of Access Codes (# missing codes):\n{}' \
-        .format(len(Report['OK']), '\n'.join(str(line) for line in Report['OK']),
-                len(Report['Failed Import']), '\n'.join(str(line) for line in Report['Failed Import']),
-                len(Report['Access Codes and URL']), '\n'.join(str(line) for line in Report['Access Codes and URL']),
-                len(Report['Access Codes']), '\n'.join(str(line) for line in Report['Access Codes']),
-                len(Report['URL']), '\n'.join(str(line) for line in Report['URL']),
-                len(Report['Run out of codes']), '\n'.join(str(line) for line in Report['Run out of codes']))
+    text = ''
+    if len(Report['OK']):
+        text += 'The following {} files where correctly uploaded to connect:' \
+                '\n{}'.format(len(Report['OK']), '\n'.join(str(line) for line in Report['OK']))
+    if len(Report['Failed Import']):
+        text += '\n\nThe following {} files where generated correctly but could not be uploaded to connect:' \
+                '\n{}'.format(len(Report['Failed Import']),
+                              '\n'.join(str(line) for line in Report['Failed Import']))
+    if len(Report['Dismiss']):
+        text += '\n\nThe following {} requests where dismissed because already available codes:' \
+                '\n{}'.format(len(Report['Dismiss']), '\n'.join(str(line) for line in Report['Dismiss']))
+    if len(Report['Missing Access Codes and URL']):
+        text += '\n\nThe following {} files where missing Access Codes and URL (# missing codes):' \
+                '\n{}'.format(len(Report['Missing Access Codes and URL']),
+                              '\n'.join(str(line) for line in Report['Missing Access Codes and URL']))
+    if len(Report['Missing Access Codes']):
+        text += '\n\nThe following {} files where missing Access Codes (# missing codes):' \
+                '\n{}'.format(len(Report['Missing Access Codes']),
+                              '\n'.join(str(line) for line in Report['Missing Access Codes']))
+    if len(Report['Missing URL']):
+        text += '\n\nThe following {} files where missing URL:' \
+                '\n{}'.format(len(Report['Missing URL']), '\n'.join(str(line) for line in Report['Missing URL']))
+    if len(Report['Run out of codes']):
+        text += '\n\nThe following {} files Run out of Access Codes. Must upload and request missing codes:' \
+                '\n{}'.format(len(Report['Run out of codes']),
+                              '\n'.join(str(line) for line in Report['Run out of codes']))
+    if len(Report['eCampus Content Holding']):
+        text += '\n\nThe following {} files have eCampus Content Holding Publisher with no available codes.' \
+                '\nContact Maka for new codes:' \
+                '\n{}'.format(len(Report['eCampus Content Holding']),
+                              '\n'.join(str(line) for line in Report['eCampus Content Holding']))
 
     f = open(file_name, 'w')
     f.write(text)
@@ -202,7 +244,7 @@ def move_csv_file(Error, Check_file, School, Catalog, save_path, access_codes_fi
         print('File moved to {}'.format(new_dir))
     elif Error:
         # Make new directory to save file with errors
-        new_dir = time.strftime('Access-Codes/%Y/%m/%d/Missing {}/{}/{}/'.format(Error, School, Catalog))
+        new_dir = time.strftime('Access-Codes/%Y/%m/%d/{}/{}/{}/'.format(Error, School, Catalog))
         os.makedirs(save_path + new_dir, exist_ok=True)
         os.rename(str(access_codes_file), save_path + new_dir + str(access_codes_file))
         print('File moved to {}'.format(new_dir))
