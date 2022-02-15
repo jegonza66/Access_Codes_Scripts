@@ -50,11 +50,11 @@ def run_low_no_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schoo
             if Total_quantity < Available_codes:
                 quantity = Total_quantity
                 Missing_codes = 0
-                print('Already {} available codes for a {} request.\nDismiss'.format(Available_codes, quantity))
+                print('Already {} available codes for a {} codes request.\nDismiss'.format(Available_codes, quantity))
                 Error = 'Dismiss'
 
             if Total_quantity > Available_codes:
-                quantity = Total_quantity - Available_codes + 10
+                quantity = Total_quantity - Available_codes
                 print('Already {} available codes for a {} codes request.\n{} Codes needed.'.format(Available_codes,
                                                                                               Total_quantity,
                                                                                               quantity))
