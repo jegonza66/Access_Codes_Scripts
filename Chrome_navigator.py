@@ -283,7 +283,7 @@ def automatic_verba_upload(driver, csv_file, Verba_School, Catalog):
     return File_imported
 
 
-def vital_source_login(my_username='Username', my_password='Password'):
+def vital_source_login(my_username, my_password):
     # Login to manage.vitalsource
     driver = webdriver.Chrome(ChromeDriverManager().install())
     # Open the website
@@ -313,3 +313,21 @@ def vital_source_url_search(driver, Billing_ISBN):
     search_bar.send_keys(Billing_ISBN)
 
     # Find book and open
+
+def connect_active_item(driver, Verba_School, Catalog, ISBN):
+
+#find element number in list of courses.
+# Si hay uno solo no lleva nada en li. Si hay mas de uno van numerados li[1], li[2], etc.
+#Chequear si hay mas de uno, si lo hay definir los xpath con .format(numero en la lista), si hay uno solo .format('')
+
+    ejemplo_multiples_items_1 = '/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div/div/div[2]/div/div[2]/div/ul/li[1]/div[2]/div[1]/div'
+    ejemplo_multiples_items_3 = '/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div/div/div[2]/div/div[2]/div/ul/li[3]/div[2]/div[1]/div'
+
+    xpath_active_button = '/ html / body / div[1] / div / div[1] / div / div[3] / div / div / div / div / div / div[2] / div / div[2] / div / ul / li{} / div[2] / div[1] / div'.format('')
+    xpath_span_item = '/ html / body / div[1] / div / div[1] / div / div[3] / div / div / div / div / div / div[2] / div / div[2] / div / ul / li{} / div[2] / div[1] / div / span[2]'.format()
+    WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, xpath_active_button))).click()
+    Active = driver.find_element_by_xpath(xpath_span_item).text
+
+
+    ejemplo_multiples_items_1 = '/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div/div/div[2]/div/div[2]/div/ul/li[1]/div[2]/div[1]/div'
+    ejemplo_multiples_items_3 = '/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div/div/div[2]/div/div[2]/div/ul/li[3]/div[2]/div[1]/div'

@@ -53,7 +53,7 @@ def run_low_no_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schoo
                 print('Already {} available codes for a {} codes request.\nDismiss'.format(Available_codes, quantity))
                 Error = 'Dismiss'
 
-            if Total_quantity > Available_codes:
+            elif Total_quantity > Available_codes:
                 quantity = Total_quantity - Available_codes
                 print('Already {} available codes for a {} codes request.\n{} Codes needed.'.format(Available_codes,
                                                                                               Total_quantity,
