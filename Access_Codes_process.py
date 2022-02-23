@@ -47,7 +47,7 @@ def run_low_no_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schoo
                 Error = 'eCampus Content Holding'
 
         else:
-            if Total_quantity < Available_codes:
+            if Total_quantity <= Available_codes:
                 quantity = Total_quantity
                 Missing_codes = 0
                 print('Already {} available codes for a {} codes request.\nDismiss'.format(Available_codes, quantity))
