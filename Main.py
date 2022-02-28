@@ -14,6 +14,8 @@ Credentials = Paths_Credentials.API_Paths()
 Credentials, Automatic_Verba_upload = Paths_Credentials.Verba_Credentials(Credentials)
 
 if process_todo == 'Daily Delta':
+
+    # Run Code Reveal Cases
     print('\nRunning Code reveal Cases\n')
     Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, run, DD = \
         DD_setup.run_code_reveal(Credentials=Credentials)
@@ -26,6 +28,7 @@ if process_todo == 'Daily Delta':
     else:
         print('\nRun == False.\nLenght of ISBNs, quantities, URLs did not match. Please check excel files.')
 
+    # Run Fake Code Reveal Cases
     print('\nRuning Fake Code Reveal Cases\n')
     Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, run = \
         DD_setup.run_fake_code_reveal(Credentials=Credentials, DD=DD)

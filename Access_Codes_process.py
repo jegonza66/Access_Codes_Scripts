@@ -15,6 +15,8 @@ def run_low_no_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schoo
         Verba_Username = Credentials['Verba_Username']
         Verba_Password = Credentials['Verba_Password']
         driver = Chrome_navigator.verba_connect_login(my_username=Verba_Username, my_password=Verba_Password)
+        previous_school = ''
+        previous_catalog = ''
 
     # Report variable for storing information
     Report = {'OK': [], 'Failed Import': [], 'Missing Access Codes': [], 'Missing URL': [],
@@ -31,8 +33,10 @@ def run_low_no_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schoo
                                                                                            Publishers, Titles, URLs):
 
         File_imported = False
-        Available_codes = Chrome_navigator.check_available_codes(driver=driver, Verba_School=Verba_School,
-                                                                 Catalog=Catalog, ISBN=Billing_ISBN)
+        Available_codes, previous_school, previous_catalog = \
+            Chrome_navigator.check_available_codes(driver=driver, Verba_School=Verba_School,
+                                                   Catalog=Catalog, ISBN=Billing_ISBN,
+                                                   previous_school=previous_school, previous_catalog=previous_catalog)
 
         # eCampus Content Holding exception
         if Publisher == 'eCampus Content Holding':
@@ -88,8 +92,11 @@ def run_low_no_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schoo
 
                 if (not Error) and (not Ruby_run_error) and Automatic_Verba_upload:
                     # Open Verba Connect/School/Sttings and drop import
-                    File_imported = Chrome_navigator.automatic_verba_upload(driver=driver, csv_file=access_codes_file,
-                                                                            Verba_School=Verba_School, Catalog=Catalog)
+                    File_imported, previous_school, previous_catalog = \
+                        Chrome_navigator.automatic_verba_upload(driver=driver, csv_file=access_codes_file,
+                                                                Verba_School=Verba_School, Catalog=Catalog,
+                                                                previous_school=previous_school,
+                                                                previous_catalog=previous_catalog)
 
                 # Move access codes file to history folder
                 Functions.move_csv_file(Error=Error, Check_file=Ruby_run_error, School=School, Catalog=Catalog,
@@ -119,6 +126,8 @@ def run_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verb
         Verba_Username = Credentials['Verba_Username']
         Verba_Password = Credentials['Verba_Password']
         driver = Chrome_navigator.verba_connect_login(my_username=Verba_Username, my_password=Verba_Password)
+        previous_school = ''
+        previous_catalog = ''
 
     # Report variable for storing information
     Report = {'OK': [], 'Failed Import': [], 'Missing Access Codes': [], 'Missing URL': [],
@@ -133,8 +142,11 @@ def run_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verb
                                                                                  Schools, Verba_Schools, Catalogs):
 
         File_imported = False
-        Available_codes = Chrome_navigator.check_available_codes(driver=driver, Verba_School=Verba_School,
-                                                                 Catalog=Catalog, ISBN=Billing_ISBN)
+        Available_codes, previous_school, previous_catalog = \
+            Chrome_navigator.check_available_codes(driver=driver, Verba_School=Verba_School,
+                                                   Catalog=Catalog, ISBN=Billing_ISBN,
+                                                   previous_school=previous_school,
+                                                   previous_catalog=previous_catalog)
 
         if Total_quantity < Available_codes:
             quantity = Total_quantity
@@ -177,8 +189,11 @@ def run_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verb
 
             if (not Error) and (not Ruby_run_error) and Automatic_Verba_upload:
                 # Open Verba Connect/School/Sttings and drop import
-                File_imported = Chrome_navigator.automatic_verba_upload(driver=driver, csv_file=access_codes_file,
-                                                                        Verba_School=Verba_School, Catalog=Catalog)
+                File_imported, previous_school, previous_catalog = \
+                    Chrome_navigator.automatic_verba_upload(driver=driver, csv_file=access_codes_file,
+                                                            Verba_School=Verba_School, Catalog=Catalog,
+                                                            previous_school=previous_school,
+                                                            previous_catalog=previous_catalog)
 
             # Move access codes file to history folder
             Functions.move_csv_file(Error=Error, Check_file=Ruby_run_error, School=School, Catalog=Catalog,
@@ -207,6 +222,10 @@ def run_fake_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools,
     Report = {'OK': [], 'Failed Import': [], 'Missing Access Codes': [], 'Missing URL': [],
               'Missing Access Codes and URL': [], 'Run out of codes': [], 'eCampus Content Holding': [], 'Dismiss': []}
 
+    # Define previous selected School and Catalog in Connect
+    previous_school = ''
+    previous_catalog = ''
+
     print('\n\nTotal cases: {}\n'.format(len(Billing_ISBNs)))
     # Start run for
     for Billing_ISBN, VBID, quantity, School, Verba_School, Catalog in zip(Billing_ISBNs, VBIDs, quantities, Schools,
@@ -228,8 +247,11 @@ def run_fake_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools,
         File_imported = False
         if Automatic_Verba_upload:
             # Open Verba Connect/School/Sttings and drop import
-            File_imported = Chrome_navigator.automatic_verba_upload(driver=driver, csv_file=file_name,
-                                                                    Verba_School=Verba_School, Catalog=Catalog)
+            File_imported, previous_school, previous_catalog = \
+                Chrome_navigator.automatic_verba_upload(driver=driver, csv_file=access_codes_file,
+                                                        Verba_School=Verba_School, Catalog=Catalog,
+                                                        previous_school=previous_school,
+                                                        previous_catalog=previous_catalog)
 
         Error = False
         Ruby_run_error = False
