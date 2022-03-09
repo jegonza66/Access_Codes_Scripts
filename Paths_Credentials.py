@@ -33,7 +33,8 @@ def API_Paths(Credentials_file = 'Credentials/Credentials.pkl'):
 
 def Verba_Credentials(Credentials, Credentials_file = 'Credentials/Credentials.pkl'):
 
-    Answer = input('Do you want to automatically upload csv files to Verba Connect?\nPlease answer "yes" or "no":')
+    Answer = input('Do you want to automatically upload csv files to Verba Connect?\n'
+                   'Please answer "yes" or "no":')
     yes = {'yes', 'y', 'ye'}
     no = {'no', 'n', ''}
     if Answer in yes:

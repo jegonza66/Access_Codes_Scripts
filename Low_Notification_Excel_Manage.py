@@ -46,7 +46,9 @@ def read_low_files():
     # Take only rows with bigger number of codes needed for repeated isbn schools and catalogs
     New_file = New_file.sort_values('Number Codes Needed', ascending=False).drop_duplicates(columns_no_codes,
                                                                                             keep='first')
-
+    # Make New_file ISBN columns type object (in case no ISBNS have '-' or 'R' it will be type int, and cannot compare
+    # to Old_file columns of type object(
+    New_file = New_file.astype({"Billing Isbn": object})
     Old_file.drop_duplicates(inplace=True)
 
     return Old_file, New_file, Low_notification_old_path

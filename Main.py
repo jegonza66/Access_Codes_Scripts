@@ -33,7 +33,7 @@ if process_todo == 'Daily Delta':
     Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, run = \
         DD_setup.run_fake_code_reveal(Credentials=Credentials, DD=DD)
     if run:
-        Access_Codes_process.run_fake_code_reveal(Credentials=Credentials, Billing_ISBNs=Billing_ISBNs, VBIDs=VBIDs,
+        Report, driver = Access_Codes_process.run_fake_code_reveal(Credentials=Credentials, Billing_ISBNs=Billing_ISBNs, VBIDs=VBIDs,
                                                   quantities=quantities, Schools=Schools, Verba_Schools=Verba_Schools,
                                                   Catalogs=Catalogs, Automatic_Verba_upload=Automatic_Verba_upload,
                                                   driver=driver, process_todo=process_todo + ' Fake Code Reveal')
@@ -44,7 +44,7 @@ elif process_todo == 'Low Notification':
     Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, Publishers, Titles, URLs, run = \
         Low_No_notification_setup.run_low_notification_setup(Credentials=Credentials)
     if run:
-        Access_Codes_process.run_low_no_notification(Credentials=Credentials, Billing_ISBNs=Billing_ISBNs, VBIDs=VBIDs,
+        Report, driver = Access_Codes_process.run_low_no_notification(Credentials=Credentials, Billing_ISBNs=Billing_ISBNs, VBIDs=VBIDs,
                                                      quantities=quantities, Schools=Schools, Verba_Schools=Verba_Schools,
                                                      Catalogs=Catalogs, Publishers=Publishers, Titles=Titles, URLs=URLs,
                                                      Automatic_Verba_upload=Automatic_Verba_upload,
@@ -56,7 +56,7 @@ elif process_todo == 'No Notification':
     Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, URLs, run = \
         Low_No_notification_setup.run_no_notification_setup(Credentials=Credentials)
     if run:
-        Access_Codes_process.run_low_no_notification(Credentials=Credentials, Billing_ISBNs=Billing_ISBNs, VBIDs=VBIDs,
+        Report, driver = Access_Codes_process.run_low_no_notification(Credentials=Credentials, Billing_ISBNs=Billing_ISBNs, VBIDs=VBIDs,
                                                      quantities=quantities, Schools=Schools, Verba_Schools=Verba_Schools,
                                                      Catalogs=Catalogs, URLs=URLs,
                                                      Automatic_Verba_upload=Automatic_Verba_upload,
