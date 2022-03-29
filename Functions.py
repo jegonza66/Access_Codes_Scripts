@@ -1,6 +1,5 @@
 import time
 import os
-
 import pandas as pd
 import tkinter as tk
 from tkinter import filedialog
@@ -8,21 +7,17 @@ import pickle
 
 
 def choose_process():
-    Answer = input('\nWhat process would you like to run?\n'
+    Answer = input('\nWhich process would you like to run?\n'
                    '1. BNED Daily Delta\n'
-                   '2. Low Notification\n'
-                   '3. No Notification\n'
+                   '2. Low/No Notification\n'
                    'Enter the corresponding number or name and press Enter.')
 
     DD_selection = {'1', 'Daily Delta', 'dd', 'DD'}
     Low_notification_selection = {'2', 'low', 'Low Notification'}
-    No_notification_selection = {'3', 'No', 'No Notification'}
     if Answer in DD_selection:
         process = 'Daily Delta'
     elif Answer in Low_notification_selection:
-        process = 'Low Notification'
-    elif Answer in No_notification_selection:
-        process = 'No Notification'
+        process = 'Low/No Notification'
 
     return process
 
@@ -130,15 +125,30 @@ def check_file(df, csv_file, quantity, URL, Title):
                                 'please navigate to the publisher integration via your LMS.'
             Error = False
             Missing_codes = 0
-            df.to_csv(csv_file)
+            df.to_csv(csv_file, index=False)
 
     elif df['Access Code'].isnull().values.any():
         Error = 'Missing Access Codes'
         if codes_generated:
             Error = 'Run out of codes'
             df = df.head(codes_generated)
+        if 'eVP' in Title:
+            print('eVP Title.\nChange codes column to message.')
+            df['Access Code'] = 'No access code is needed for this content, ' \
+                                'please navigate to the publisher integration via your LMS.'
+            Error = False
+            Missing_codes = 0
+            df.to_csv(csv_file, index=False)
+
     elif df['URL'].isnull().values.any():
         Error = 'Missing URL'
+        if 'eVP' in Title:
+            print('eVP Title.\nChange codes column to message.')
+            df['Access Code'] = 'No access code is needed for this content, ' \
+                                'please navigate to the publisher integration via your LMS.'
+            Error = False
+            Missing_codes = 0
+            df.to_csv(csv_file, index=False)
 
     return df, Error, Missing_codes
 
@@ -157,25 +167,25 @@ def write_report(Report, save_path, process):
     file_name = time.strftime(new_dir + '{} Report %H_%M.txt'.format(process))
     text = ''
     if len(Report['OK']):
-        text += 'The following {} files where correctly uploaded to connect:' \
+        text += 'The following {} files were correctly uploaded to connect:' \
                 '\n{}'.format(len(Report['OK']), '\n'.join(str(line) for line in Report['OK']))
     if len(Report['Failed Import']):
-        text += '\n\nThe following {} files where generated correctly but could not be uploaded to connect:' \
+        text += '\n\nThe following {} files were generated correctly but could not be uploaded to connect:' \
                 '\n{}'.format(len(Report['Failed Import']),
                               '\n'.join(str(line) for line in Report['Failed Import']))
     if len(Report['Dismiss']):
-        text += '\n\nThe following {} requests where dismissed because already available codes:' \
+        text += '\n\nThe following {} requests were dismissed because already available codes:' \
                 '\n{}'.format(len(Report['Dismiss']), '\n'.join(str(line) for line in Report['Dismiss']))
     if len(Report['Missing Access Codes and URL']):
-        text += '\n\nThe following {} files where missing Access Codes and URL (# missing codes):' \
+        text += '\n\nThe following {} files were missing Access Codes and URL (# missing codes):' \
                 '\n{}'.format(len(Report['Missing Access Codes and URL']),
                               '\n'.join(str(line) for line in Report['Missing Access Codes and URL']))
     if len(Report['Missing Access Codes']):
-        text += '\n\nThe following {} files where missing Access Codes (# missing codes):' \
+        text += '\n\nThe following {} files were missing Access Codes (# missing codes):' \
                 '\n{}'.format(len(Report['Missing Access Codes']),
                               '\n'.join(str(line) for line in Report['Missing Access Codes']))
     if len(Report['Missing URL']):
-        text += '\n\nThe following {} files where missing URL:' \
+        text += '\n\nThe following {} files were missing URL:' \
                 '\n{}'.format(len(Report['Missing URL']), '\n'.join(str(line) for line in Report['Missing URL']))
     if len(Report['Run out of codes']):
         text += '\n\nThe following {} files Run out of Access Codes. Must upload and request missing codes:' \
@@ -200,25 +210,25 @@ def write_final_report(Report, save_path, process):
     file_name = time.strftime(new_dir + '{} Final Report %H_%M.txt'.format(process))
     text = ''
     if len(Report['OK']):
-        text += 'The following {} files where correctly uploaded to connect:' \
+        text += 'The following {} files were correctly uploaded to connect:' \
                 '\n{}'.format(len(Report['OK']), '\n'.join(str(line) for line in Report['OK']))
     if len(Report['Failed Import']):
-        text += '\n\nThe following {} files where generated correctly but could not be uploaded to connect:' \
+        text += '\n\nThe following {} files were generated correctly but could not be uploaded to connect:' \
                 '\n{}'.format(len(Report['Failed Import']),
                               '\n'.join(str(line) for line in Report['Failed Import']))
     if len(Report['Dismiss']):
-        text += '\n\nThe following {} requests where dismissed because already available codes:' \
+        text += '\n\nThe following {} requests were dismissed because already available codes:' \
                 '\n{}'.format(len(Report['Dismiss']), '\n'.join(str(line) for line in Report['Dismiss']))
     if len(Report['Missing Access Codes and URL']):
-        text += '\n\nThe following {} files where missing Access Codes and URL (# missing codes):' \
+        text += '\n\nThe following {} files were missing Access Codes and URL (# missing codes):' \
                 '\n{}'.format(len(Report['Missing Access Codes and URL']),
                               '\n'.join(str(line) for line in Report['Missing Access Codes and URL']))
     if len(Report['Missing Access Codes']):
-        text += '\n\nThe following {} files where missing Access Codes (# missing codes):' \
+        text += '\n\nThe following {} files were missing Access Codes (# missing codes):' \
                 '\n{}'.format(len(Report['Missing Access Codes']),
                               '\n'.join(str(line) for line in Report['Missing Access Codes']))
     if len(Report['Missing URL']):
-        text += '\n\nThe following {} files where missing URL:' \
+        text += '\n\nThe following {} files were missing URL:' \
                 '\n{}'.format(len(Report['Missing URL']), '\n'.join(str(line) for line in Report['Missing URL']))
     if len(Report['Run out of codes']):
         text += '\n\nThe following {} files Run out of Access Codes. Must upload and request missing codes:' \
@@ -233,6 +243,8 @@ def write_final_report(Report, save_path, process):
     f = open(file_name, 'w')
     f.write(text)
     f.close()
+
+    print(text)
 
 
 def move_csv_file(Error, Check_file, School, Catalog, save_path, access_codes_file):

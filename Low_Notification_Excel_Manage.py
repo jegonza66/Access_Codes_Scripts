@@ -3,23 +3,27 @@ import xlrd
 import tkinter as tk
 from tkinter import filedialog
 
-
-def read_no_file():
+def read_low_no_file():
     # Read files
-    print('Please use the dialog window to go to the location of the No Access Code Notification.xlsx file '
+    print('Please use the dialog window to go to the location of the Access Code Notification.xlsx file '
           'and open it.')
     root = tk.Tk()
     root.withdraw()
     No_notification_path = filedialog.askopenfilename()
 
-    columns = ['Login', 'Name', 'Billing Isbn', 'Number Codes Needed', 'Access Code URL']
+    columns = ['Login', 'Name', 'Name.1', 'Title', 'Billing Isbn', 'Number Codes Needed', 'Access Code URL']
+    columns_no_codes = ['Login', 'Name', 'Name.1', 'Title', 'Billing Isbn', 'Access Code URL']
     New_file = pd.read_excel(io=No_notification_path)[columns]
     # Drop duplicated rows
     New_file.drop_duplicates(inplace=True)
     # Take only rows with bigger number of codes needed for repeated isbn schools and catalogs
-    New_file = New_file.sort_values('Number Codes Needed', ascending=True).drop_duplicates(
-        ['Login', 'Name', 'Billing Isbn'], keep='last')
+    New_file = New_file.sort_values('Number Codes Needed', ascending=False).drop_duplicates(columns_no_codes, keep='first')
+    # Make New_file ISBN columns type object (in case no ISBNS have '-' or 'R' it will be type int, and cannot compare
+    # to Old_file columns of type object)
+    New_file = New_file.astype({"Billing Isbn": object})
+
     return New_file
+
 
 def read_low_files():
     # Read files

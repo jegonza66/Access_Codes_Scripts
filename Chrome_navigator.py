@@ -270,7 +270,7 @@ def check_available_codes(driver, Verba_School, Catalog, ISBN, previous_school, 
 
 def automatic_verba_upload(driver, csv_file, Verba_School, Catalog, previous_school, previous_catalog):
 
-    File_imported = False
+    File_imported = 'Failed Import'
     School_change = Verba_School != previous_school
     Catalog_change = Catalog != previous_catalog
 
@@ -289,7 +289,6 @@ def automatic_verba_upload(driver, csv_file, Verba_School, Catalog, previous_sch
         if Catalog_Selected:
             previous_catalog = Catalog
             Access_Code_import_Open = False
-            File_imported = 'Failed Import'
 
             # try open access code import if superadmin is on
             try:

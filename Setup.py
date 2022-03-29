@@ -50,13 +50,14 @@ def run_low_notification_setup(Credentials):
     return Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, Publishers, Titles, URLs, run
 
 
-def run_no_notification_setup(Credentials):
+def run_low_no_notification_setup(Credentials):
     # Read files
-    New_file = Low_Notification_Excel_Manage.read_no_file()
+    New_file = Low_Notification_Excel_Manage.read_low_no_file()
 
     # Getting ready for ruby run
     Billing_ISBNs = list(New_file['Billing Isbn'].values)
-    VBIDs = [Billing_ISBN if type(Billing_ISBN) == int else Billing_ISBN.split('R')[0] for Billing_ISBN in Billing_ISBNs]
+    VBIDs = [Billing_ISBN if type(Billing_ISBN) == int else Billing_ISBN.split('R')[0] for Billing_ISBN in
+             Billing_ISBNs]
 
     # Define quantities (rounding up), schools and catalogs from dataframe
     quantities = np.array(list(New_file['Number Codes Needed'].values))
@@ -64,15 +65,18 @@ def run_no_notification_setup(Credentials):
     Verba_Schools = list(New_file['Login'].values)
     Catalogs = list(New_file['Name'].values)
     URLs = list(New_file['Access Code URL'].values)
+    Publishers = list(New_file['Name.1'].values)
+    Titles = list(New_file['Title'].values)
 
     # Load school names list and translate to School names
     School_names_path = Functions.School_Name_path(Credentials)
     Schools = Functions.translate_verba_school_name(School_names_path=School_names_path, Verba_Schools=Verba_Schools)
 
     # Check Billing_ISBNs and VBIDs have same size
-    if len(Billing_ISBNs) == len(VBIDs) == len(quantities) == len(Schools) == len(Catalogs) == len(URLs):
+    if len(Billing_ISBNs) == len(VBIDs) == len(quantities) == len(Schools) == len(Catalogs) == len(URLs) == len(
+            Publishers) == len(Titles):
         run = True
     else:
         run = False
 
-    return Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, URLs, run
+    return Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, Publishers, Titles, URLs, run

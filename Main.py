@@ -1,4 +1,4 @@
-import Low_No_notification_setup
+import Setup
 import DD_setup
 import Paths_Credentials
 import Functions
@@ -14,7 +14,6 @@ Credentials = Paths_Credentials.API_Paths()
 Credentials, Automatic_Verba_upload = Paths_Credentials.Verba_Credentials(Credentials)
 
 if process_todo == 'Daily Delta':
-
     # Run Code Reveal Cases
     print('\nRunning Code reveal Cases\n')
     Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, run, DD = \
@@ -40,25 +39,14 @@ if process_todo == 'Daily Delta':
     else:
         print('\nRun == False.\nLenght of ISBNs, quantities, URLs did not match. Please check excel files.')
 
-elif process_todo == 'Low Notification':
+
+elif process_todo == 'Low/No Notification':
     Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, Publishers, Titles, URLs, run = \
-        Low_No_notification_setup.run_low_notification_setup(Credentials=Credentials)
+        Setup.run_low_no_notification_setup(Credentials=Credentials)
     if run:
         Report, driver = Access_Codes_process.run_low_no_notification(Credentials=Credentials, Billing_ISBNs=Billing_ISBNs, VBIDs=VBIDs,
                                                      quantities=quantities, Schools=Schools, Verba_Schools=Verba_Schools,
                                                      Catalogs=Catalogs, Publishers=Publishers, Titles=Titles, URLs=URLs,
-                                                     Automatic_Verba_upload=Automatic_Verba_upload,
-                                                     process_todo=process_todo)
-    else:
-        print('\nRun == False.\nLenght of ISBNs, quantities, URLs did not match. Please check excel files.')
-
-elif process_todo == 'No Notification':
-    Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, URLs, run = \
-        Low_No_notification_setup.run_no_notification_setup(Credentials=Credentials)
-    if run:
-        Report, driver = Access_Codes_process.run_low_no_notification(Credentials=Credentials, Billing_ISBNs=Billing_ISBNs, VBIDs=VBIDs,
-                                                     quantities=quantities, Schools=Schools, Verba_Schools=Verba_Schools,
-                                                     Catalogs=Catalogs, URLs=URLs,
                                                      Automatic_Verba_upload=Automatic_Verba_upload,
                                                      process_todo=process_todo)
     else:
