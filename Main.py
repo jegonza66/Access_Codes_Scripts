@@ -40,7 +40,7 @@ if process_todo == 'Daily Delta':
         print('\nRun == False.\nLenght of ISBNs, quantities, URLs did not match. Please check excel files.')
 
 
-elif process_todo == 'Low/No Notification':
+elif process_todo == 'Low-No Notification':
     Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, Publishers, Titles, URLs, run = \
         Setup.run_low_no_notification_setup(Credentials=Credentials)
     if run:

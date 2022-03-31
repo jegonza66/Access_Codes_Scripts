@@ -7,17 +7,21 @@ import pickle
 
 
 def choose_process():
-    Answer = input('\nWhich process would you like to run?\n'
-                   '1. BNED Daily Delta\n'
-                   '2. Low/No Notification\n'
-                   'Enter the corresponding number or name and press Enter.')
+    process = False
+    while not process:
+        Answer = input('\nWhich process would you like to run?\n'
+                       '1. BNED Daily Delta\n'
+                       '2. Low-No Notification\n'
+                       'Enter the corresponding number or name and press Enter.')
 
-    DD_selection = {'1', 'Daily Delta', 'dd', 'DD'}
-    Low_notification_selection = {'2', 'low', 'Low Notification'}
-    if Answer in DD_selection:
-        process = 'Daily Delta'
-    elif Answer in Low_notification_selection:
-        process = 'Low/No Notification'
+        DD_selection = {'1', 'Daily Delta', 'dd', 'DD'}
+        Low_notification_selection = {'2', 'low', 'Low Notification', 'no', 'low-no', 'Low-No'}
+        if Answer in DD_selection:
+            process = 'Daily Delta'
+        elif Answer in Low_notification_selection:
+            process = 'Low-No Notification'
+        if not process:
+            print('Please select one of the options given!')
 
     return process
 
