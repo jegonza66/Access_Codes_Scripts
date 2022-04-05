@@ -30,7 +30,7 @@ def verba_connect_login(my_username, my_password):
     login_button = driver.find_element_by_css_selector(login_button_css)
     # Click login
     login_button.click()
-    input('\nLogin to Verba Connect ready? Make the window fullscreen and press Enter to continue.')
+    input('\nLogin to Verba Connect ready? Press Enter to continue.')
     driver.maximize_window()
 
     return driver
