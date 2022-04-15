@@ -106,7 +106,7 @@ def run_low_no_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schoo
 
                 # Move access codes file to history folder
                 Functions.move_csv_file(Error=Error, Check_file=Ruby_run_error, School=School, Catalog=Catalog,
-                                        save_path=save_path, access_codes_file=access_codes_file)
+                                        save_path=save_path, access_codes_file=access_codes_file, process=process_todo)
 
         # Add if this title run successfully or not to report
         Report = Functions.append_to_report(Report=Report, File_imported=File_imported, Error=Error,
@@ -208,7 +208,7 @@ def run_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verb
 
             # Move access codes file to history folder
             Functions.move_csv_file(Error=Error, Check_file=Ruby_run_error, School=School, Catalog=Catalog,
-                                    save_path=save_path, access_codes_file=access_codes_file)
+                                    save_path=save_path, access_codes_file=access_codes_file, process=process_todo)
 
         # Add if this title run successfully or not to report
         Report = Functions.append_to_report(Report=Report, File_imported=File_imported, Error=Error,
@@ -291,7 +291,7 @@ def run_fake_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools,
 
             # Move access codes file to history folder
             Functions.move_csv_file(Error=Error, Check_file=Ruby_run_error, School=School, Catalog=Catalog,
-                                    save_path=save_path, access_codes_file=file_name)
+                                    save_path=save_path, access_codes_file=file_name, process=process_todo)
         # Add if this title run successfully or not to report
         Report = Functions.append_to_report(Report=Report, File_imported=File_imported, Error=Error,
                                             Missing_codes=Missing_codes, School=School, Catalog=Catalog, Publisher='',

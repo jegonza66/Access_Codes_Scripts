@@ -166,7 +166,7 @@ def append_to_report(Report, File_imported, Error, Missing_codes, School, Catalo
 
 
 def write_report(Report, save_path, process):
-    new_dir = save_path + time.strftime('Access-Codes/%Y/%m/%d/Reports/')
+    new_dir = save_path + time.strftime('Access-Codes/%Y/%m/%d/{}/Reports/'.format(process))
     os.makedirs(new_dir, exist_ok=True)
     file_name = time.strftime(new_dir + '{} Report %H_%M.txt'.format(process))
     text = ''
@@ -209,7 +209,7 @@ def write_report(Report, save_path, process):
 def write_final_report(Report, save_path, process):
     for key_name in Report.keys():
         Report[key_name] = sorted(Report[key_name], key=lambda t: (t[0], t[1]))
-    new_dir = save_path + time.strftime('Access-Codes/%Y/%m/%d/')
+    new_dir = save_path + time.strftime('Access-Codes/%Y/%m/%d/{}/'.format(process))
     os.makedirs(new_dir, exist_ok=True)
     file_name = time.strftime(new_dir + '{} Final Report %H_%M.txt'.format(process))
     text = ''
@@ -251,22 +251,22 @@ def write_final_report(Report, save_path, process):
     print(text)
 
 
-def move_csv_file(Error, Check_file, School, Catalog, save_path, access_codes_file):
+def move_csv_file(Error, Check_file, School, Catalog, save_path, access_codes_file, process):
     if (not Error) & (not Check_file):
         # Make new directory to save file without errors
-        new_dir = time.strftime('Access-Codes/%Y/%m/%d/Good/{}/{}/'.format(School, Catalog))
+        new_dir = time.strftime('Access-Codes/%Y/%m/%d/{}/Good/{}/{}/'.format(process, School, Catalog))
         os.makedirs(save_path + new_dir, exist_ok=True)
         os.rename(str(access_codes_file), save_path + new_dir + str(access_codes_file))
         print('File moved to {}\n'.format(new_dir))
     elif Error:
         # Make new directory to save file with errors
-        new_dir = time.strftime('Access-Codes/%Y/%m/%d/{}/{}/{}/'.format(Error, School, Catalog))
+        new_dir = time.strftime('Access-Codes/%Y/%m/%d/{}/{}/{}/{}/'.format(process, Error, School, Catalog))
         os.makedirs(save_path + new_dir, exist_ok=True)
         os.rename(str(access_codes_file), save_path + new_dir + str(access_codes_file))
         print('File moved to {}\n'.format(new_dir))
     elif Check_file:
         # Make new directory to save file for manual check
-        new_dir = time.strftime('Access-Codes/%Y/%m/%d/Ruby Error/{}/{}/'.format(School, Catalog))
+        new_dir = time.strftime('Access-Codes/%Y/%m/%d/{}/Ruby Error/{}/{}/'.format(process, School, Catalog))
         os.makedirs(save_path + new_dir, exist_ok=True)
         os.rename(str(access_codes_file), save_path + new_dir + str(access_codes_file))
         print('\nFile moved to {}\n'.format(new_dir))
