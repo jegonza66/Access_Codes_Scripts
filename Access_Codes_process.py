@@ -1,6 +1,7 @@
 import subprocess
 import pathlib
 import pandas as pd
+import time
 
 import Functions
 import Chrome_navigator
@@ -99,6 +100,9 @@ def run_low_no_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schoo
                                                                 Verba_School=Verba_School, Catalog=Catalog,
                                                                 previous_school=previous_school,
                                                                 previous_catalog=previous_catalog)
+                    if File_imported == 'Failed Import':
+                        driver.refresh()
+                        time.sleep(3)
 
                 # Move access codes file to history folder
                 Functions.move_csv_file(Error=Error, Check_file=Ruby_run_error, School=School, Catalog=Catalog,
@@ -198,6 +202,9 @@ def run_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verb
                                                             Verba_School=Verba_School, Catalog=Catalog,
                                                             previous_school=previous_school,
                                                             previous_catalog=previous_catalog)
+                if File_imported == 'Failed Import':
+                    driver.refresh()
+                    time.sleep(3)
 
             # Move access codes file to history folder
             Functions.move_csv_file(Error=Error, Check_file=Ruby_run_error, School=School, Catalog=Catalog,
@@ -274,6 +281,9 @@ def run_fake_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools,
                                                             Verba_School=Verba_School, Catalog=Catalog,
                                                             previous_school=previous_school,
                                                             previous_catalog=previous_catalog)
+                if File_imported == 'Failed Import':
+                    driver.refresh()
+                    time.sleep(3)
 
             Error = False
             Ruby_run_error = False
