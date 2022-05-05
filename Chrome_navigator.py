@@ -298,7 +298,7 @@ def automatic_verba_upload(driver, csv_file, Verba_School, Catalog, previous_sch
                 WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, settings_xpath))).click()
 
                 # Open access code import
-                access_code_import_xpath = '/ html / body / div[1] / div / div[1] / div / div[1] / div / div / a[9]'
+                access_code_import_xpath = '/ html / body / div[1] / div / div[1] / div / div[1] / div / a[9]'
                 WebDriverWait(driver, 5).until(EC.visibility_of_element_located((By.XPATH, access_code_import_xpath)))
                 WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, access_code_import_xpath))).click()
                 Access_Code_import_Open = True
@@ -309,14 +309,12 @@ def automatic_verba_upload(driver, csv_file, Verba_School, Catalog, previous_sch
                     Super_admin = False
                     # Turn on Superadmin
                     drop_down_xpath = '/ html / body / div[1] / div / nav / div[2] / div[1] / div[1]'
-                    WebDriverWait(driver, 10).until(
-                        EC.visibility_of_element_located((By.XPATH, drop_down_xpath)))
+                    WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, drop_down_xpath)))
                     drop_down_menu = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, drop_down_xpath)))
                     drop_down_menu.click()
 
                     superadmin_xpath = '/ html / body / div[1] / div / nav / div[2] / div[1] / div[2] / div / a[1]'
-                    WebDriverWait(driver, 10).until(
-                        EC.visibility_of_element_located((By.XPATH, superadmin_xpath)))
+                    WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, superadmin_xpath)))
                     WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, superadmin_xpath))).click()
                     print('Speradmin ON')
                     Super_admin = True
@@ -329,9 +327,8 @@ def automatic_verba_upload(driver, csv_file, Verba_School, Catalog, previous_sch
                         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, settings_xpath))).click()
 
                         # Open access code import
-                        access_code_import_xpath = '/ html / body / div[1] / div / div[1] / div / div[1] / div / div / a[9]'
-                        WebDriverWait(driver, 10).until(
-                            EC.visibility_of_element_located((By.XPATH, access_code_import_xpath)))
+                        access_code_import_xpath = '/ html / body / div[1] / div / div[1] / div / div[1] / div / a[9]'
+                        WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, access_code_import_xpath)))
                         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, access_code_import_xpath))).click()
                         Access_Code_import_Open = True
                         print('Access Code import OPEN')
@@ -342,20 +339,17 @@ def automatic_verba_upload(driver, csv_file, Verba_School, Catalog, previous_sch
                 try:
                     # Send File
                     drop_file_xpath = '/ html / body / div[1] / div / div[1] / div / div[2] / div / div / div[1] / div / div / div[2] / div / input'
-                    WebDriverWait(driver, 10).until(
-                        EC.visibility_of_element_located((By.XPATH, drop_file_xpath)))
+                    WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, drop_file_xpath)))
                     drop_file = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, drop_file_xpath)))
 
                     drop_file.send_keys(str(os.path.abspath(csv_file)))
                     upload_button_xpath = '/ html / body / div[1] / div / div[1] / div / div[2] / div / div / div[2] / div / div / div / button'
-                    WebDriverWait(driver, 10).until(
-                        EC.visibility_of_element_located((By.XPATH, upload_button_xpath)))
+                    WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, upload_button_xpath)))
                     WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, upload_button_xpath))).click()
                     print('File UPLOADED')
 
                     finish_import_button_xpath = '/ html / body / div[1] / div / div[1] / div / div[2] / div / div / div[2] / div / div / div[1] / button'
-                    WebDriverWait(driver, 10).until(
-                        EC.visibility_of_element_located((By.XPATH, finish_import_button_xpath)))
+                    WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, finish_import_button_xpath)))
                     WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, finish_import_button_xpath))).click()
                     File_imported = 'OK'
                     print('File IMPORTED')
