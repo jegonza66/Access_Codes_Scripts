@@ -10,11 +10,18 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 def verba_connect_login(my_username, my_password):
-    # Login to Verba Connect
-    driver = webdriver.Chrome(ChromeDriverManager().install())
+    # Open driver
+    # Correction for ana's webdriver manager installation requirement
+    if my_username == 'ana.torres':
+        driver = webdriver.Chrome(r"C:\Users\anita\Downloads\chromedriver_win32\chromedriver.exe")
+    else:
+
+        driver = webdriver.Chrome(ChromeDriverManager().install())
+
     # Open the website
     driver.get('https://verbaconnect.com/auth/vst/login')
 
+    # Login to Verba Connect
     # Select the id box
     id_box = driver.find_element_by_id('username')
     # Send id information
@@ -30,7 +37,16 @@ def verba_connect_login(my_username, my_password):
     login_button = driver.find_element_by_css_selector(login_button_css)
     # Click login
     login_button.click()
-    input('\nLogin to Verba Connect ready? Press Enter to continue.')
+
+    # Check if successfull login
+    try:
+        time.sleep(2)
+        Dashboard_xpath = '/ html / body / div[1] / div / nav / div[1] / a[2]'
+        WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, Dashboard_xpath)))
+        WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, Dashboard_xpath))).click()
+    except:
+        input('\nVerification step needed to complete login.\n'
+              'Please complete verification and press Enter to continue.')
     driver.maximize_window()
 
     return driver

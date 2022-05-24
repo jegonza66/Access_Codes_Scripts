@@ -7,17 +7,16 @@ import Functions
 import Chrome_navigator
 
 def run_low_no_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, Publishers,
-                            Titles, URLs, Automatic_Verba_upload, process_todo):
+                            Titles, URLs, process_todo):
 
     # Define paths and credentials
     API_Key = Credentials['API_Key']
     save_path = Credentials['csv_save_path']
-    if Automatic_Verba_upload:
-        Verba_Username = Credentials['Verba_Username']
-        Verba_Password = Credentials['Verba_Password']
-        driver = Chrome_navigator.verba_connect_login(my_username=Verba_Username, my_password=Verba_Password)
-        previous_school = ''
-        previous_catalog = ''
+    Verba_Username = Credentials['Verba_Username']
+    Verba_Password = Credentials['Verba_Password']
+    driver = Chrome_navigator.verba_connect_login(my_username=Verba_Username, my_password=Verba_Password)
+    previous_school = ''
+    previous_catalog = ''
 
     # Report variable for storing information
     Report = {'OK': [], 'Failed Import': [], 'Missing Access Codes': [], 'Missing URL': [],
@@ -93,7 +92,7 @@ def run_low_no_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schoo
                 df, Error, Missing_codes = Functions.check_file(df=df, csv_file=access_codes_file, quantity=quantity,
                                                                 URL=URL, Title=Title)
 
-                if (not Error) and (not Ruby_run_error) and Automatic_Verba_upload:
+                if (not Error) and (not Ruby_run_error):
                     # Open Verba Connect/School/Sttings and drop import
                     File_imported, previous_school, previous_catalog = \
                         Chrome_navigator.automatic_verba_upload(driver=driver, csv_file=access_codes_file,
@@ -122,18 +121,16 @@ def run_low_no_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schoo
     return Report, driver
 
 
-def run_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, Automatic_Verba_upload,
-        process_todo):
+def run_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, process_todo):
 
     # Define paths and credentials
     API_Key = Credentials['API_Key']
     save_path = Credentials['csv_save_path']
-    if Automatic_Verba_upload:
-        Verba_Username = Credentials['Verba_Username']
-        Verba_Password = Credentials['Verba_Password']
-        driver = Chrome_navigator.verba_connect_login(my_username=Verba_Username, my_password=Verba_Password)
-        previous_school = ''
-        previous_catalog = ''
+    Verba_Username = Credentials['Verba_Username']
+    Verba_Password = Credentials['Verba_Password']
+    driver = Chrome_navigator.verba_connect_login(my_username=Verba_Username, my_password=Verba_Password)
+    previous_school = ''
+    previous_catalog = ''
 
     # Report variable for storing information
     Report = {'OK': [], 'Failed Import': [], 'Missing Access Codes': [], 'Missing URL': [],
@@ -195,7 +192,7 @@ def run_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verb
             df, Error, Missing_codes = Functions.check_file(df=df, csv_file=access_codes_file, quantity=quantity,
                                                             URL=float('nan'), Title='')
 
-            if (not Error) and (not Ruby_run_error) and Automatic_Verba_upload:
+            if (not Error) and (not Ruby_run_error):
                 # Open Verba Connect/School/Sttings and drop import
                 File_imported, previous_school, previous_catalog = \
                     Chrome_navigator.automatic_verba_upload(driver=driver, csv_file=access_codes_file,
@@ -223,7 +220,7 @@ def run_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verb
 
 
 def run_fake_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs,
-                         Automatic_Verba_upload, driver, process_todo):
+                         driver, process_todo):
 
     # Define paths and credentials
     save_path = Credentials['csv_save_path']
@@ -273,17 +270,15 @@ def run_fake_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools,
             file_name = 'access_codes_{}.csv'.format(Billing_ISBN)
             access_codes_file.to_csv(file_name, index=False)
 
-            File_imported = False
-            if Automatic_Verba_upload:
-                # Open Verba Connect/School/Sttings and drop import
-                File_imported, previous_school, previous_catalog = \
-                    Chrome_navigator.automatic_verba_upload(driver=driver, csv_file=file_name,
-                                                            Verba_School=Verba_School, Catalog=Catalog,
-                                                            previous_school=previous_school,
-                                                            previous_catalog=previous_catalog)
-                if File_imported == 'Failed Import':
-                    driver.refresh()
-                    time.sleep(3)
+            # Open Verba Connect/School/Sttings and drop import
+            File_imported, previous_school, previous_catalog = \
+                Chrome_navigator.automatic_verba_upload(driver=driver, csv_file=file_name,
+                                                        Verba_School=Verba_School, Catalog=Catalog,
+                                                        previous_school=previous_school,
+                                                        previous_catalog=previous_catalog)
+            if File_imported == 'Failed Import':
+                driver.refresh()
+                time.sleep(3)
 
             Error = False
             Ruby_run_error = False

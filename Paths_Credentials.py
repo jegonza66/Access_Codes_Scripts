@@ -31,35 +31,20 @@ def API_Paths(Credentials_file = 'Credentials/Credentials.pkl'):
         f.close()
     return Credentials
 
+
 def Verba_Credentials(Credentials, Credentials_file = 'Credentials/Credentials.pkl'):
 
-    Answer = input('Do you want to automatically upload csv files to Verba Connect?\n'
-                   'Please answer "yes" or "no":')
-    yes = {'yes', 'y', 'ye'}
-    no = {'no', 'n', ''}
-    if Answer in yes:
-        Automatic_Verba_upload = True
-    elif Answer in no:
-        Automatic_Verba_upload = False
-        return Credentials, Automatic_Verba_upload
+    try:
+        Credentials['Verba_Username'] and Credentials['Verba_Password']
+        return Credentials
+    except:
+        print('No Verba Connect Credentials found. Please Enter your username and password.\n')
+        Credentials['Verba_Username'] = input('Username:')
+        Credentials['Verba_Password'] = input('Password:')
 
-    if Automatic_Verba_upload:
-        try:
-            Credentials['Verba_Username'] and Credentials['Verba_Password']
-            return Credentials, Automatic_Verba_upload
-        except:
-            print('No Verba Connect Credentials found. Please Enter your username and password.\n'
-                  'If you want tu turn off the automatic upload to Verba Connect just press enter (twice).')
-            Credentials['Verba_Username'] = input('Username:')
-            Credentials['Verba_Password'] = input('Password:')
+        # Save Verba credentials in Credentials file
+        f = open(Credentials_file, 'wb')
+        pickle.dump(Credentials, f)
+        f.close()
 
-            if Credentials['Verba_Username'] and Credentials['Verba_Password']:
-                # Save Verba credentials in Credentials file
-                f = open(Credentials_file, 'wb')
-                pickle.dump(Credentials, f)
-                f.close()
-            else:
-                print('Automatic Upload to Verba Connect off.')
-                Automatic_Verba_upload = False
-
-    return Credentials, Automatic_Verba_upload
+    return Credentials

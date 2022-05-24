@@ -3,28 +3,92 @@ import xlrd
 import tkinter as tk
 from tkinter import filedialog
 
-def read_low_no_file():
+def load_file():
     # Read files
     print('Please use the dialog window to go to the location of the Access Code Notification.xlsx file '
           'and open it.')
     root = tk.Tk()
     root.withdraw()
-    No_notification_path = filedialog.askopenfilename()
+    Low_notification_path = filedialog.askopenfilename()
 
     columns = ['Login', 'Name', 'Name.1', 'Title', 'Billing Isbn', 'Number Codes Needed', 'Access Code URL']
     columns_no_codes = ['Login', 'Name', 'Name.1', 'Title', 'Billing Isbn', 'Access Code URL']
-    New_file = pd.read_excel(io=No_notification_path)[columns]
+    file = pd.read_excel(io=Low_notification_path)[columns]
     # Drop duplicated rows
-    New_file.drop_duplicates(inplace=True)
+    file.drop_duplicates(inplace=True)
     # Take only rows with bigger number of codes needed for repeated isbn schools and catalogs
-    New_file = New_file.sort_values('Number Codes Needed', ascending=False).drop_duplicates(columns_no_codes, keep='first')
-    # Make New_file ISBN columns type object (in case no ISBNS have '-' or 'R' it will be type int, and cannot compare
+    file = file.sort_values('Number Codes Needed', ascending=False).drop_duplicates(columns_no_codes, keep='first')
+    # Make file ISBN columns type object (in case no ISBNS have '-' or 'R' it will be type int, and cannot compare
     # to Old_file columns of type object)
-    New_file = New_file.astype({"Billing Isbn": object})
+    file = file.astype({"Billing Isbn": str})
+    file = file.astype({"Name": str})
+
+    return file
+
+
+def dismiss_repeated(New_file):
+    # Ask if dismiss certain isbns
+    Answer = input('\nWould you like to exclude any ISBNs?\n'
+                   'Please answer "yes" or "no":')
+    yes = {'yes', 'y', 'ye', 'YES', 'YE', 'Y'}
+    if Answer in yes:
+        # Ask for dismiss file
+        Old_file = load_file()
+
+        columns_no_codes = ['Login', 'Name', 'Name.1', 'Title', 'Billing Isbn', 'Access Code URL']
+        # mark which cases are new and repeated
+        common_right = Old_file.merge(New_file, on=columns_no_codes, how='right', indicator=True)
+
+        # take repeated cases indexes
+        repeated_cases = common_right['_merge'] == 'both'
+        repeated_cases_index = [i for i, x in enumerate(repeated_cases) if x]
+
+        # drop repeated cases
+        New_file = New_file.drop(repeated_cases_index, axis=0)
 
     return New_file
 
 
+def Load_DD_Code_Reveal(sheet_name='April 2021 -', Case='Code Reveal', columns=None):
+
+    print('Please use the dialog window to go to the location of the BNC Daily Delta.xlsx file and open it.')
+    # Open file explorer dialog for
+    root = tk.Tk()
+    root.withdraw()
+    BNC_DD_path = filedialog.askopenfilename()
+
+    print('Loading BNC DD file...')
+    # Read file
+    DD = pd.read_excel(io=BNC_DD_path, sheet_name=sheet_name)
+
+    # Keep only Code Reveal Cases and columns of interest
+    if columns is None:
+        columns = ['School', 'Catalog', 'Total Estimated Enrollments', 'SKU.1', 'New Item Work complete', 'Notes',
+                   'Publisher']
+    DD_Code_Reveal = DD.loc[(DD['New Item Work complete'] == Case) & (DD['Notes'] == Case)][columns]
+
+    # Drop duplicate rows
+    DD_Code_Reveal.drop_duplicates(inplace=True)
+    print('Done')
+
+    return DD_Code_Reveal, DD
+
+
+def Load_DD_Fake_Code_Reveal(DD, Case='Fake Code Reveal', columns=None):
+
+    # Keep only Code Reveal Cases and columns of interest
+    if columns is None:
+        columns = ['School', 'Catalog', 'Total Estimated Enrollments', 'SKU.1', 'New Item Work complete', 'Notes',
+                   'Publisher']
+    DD_Code_Reveal = DD.loc[(DD['New Item Work complete'] == Case) & (DD['Notes'] == Case)][columns]
+
+    # Drop duplicate rows
+    DD_Code_Reveal.drop_duplicates(inplace=True)
+
+    return DD_Code_Reveal
+
+
+# OLD FUNCTIONS OUT OF USE
 def read_low_files():
     # Read files
     print('Please use the dialog window to go to the location of the Old Low Access Code Notification.xls file '
@@ -96,11 +160,12 @@ def get_old_file_colors(Old_file, Low_notification_old_path):
     return Cell_colours, colors
 
 
+
 def get_new_repeated(Old_file, New_file):
     columns_no_codes = ['Login', 'Name', 'Name.1', 'Title', 'Billing Isbn', 'Access Code URL']
     # mark which cases are new and repeated
-    common_right = Old_file.merge(New_file, on=columns_no_codes, how='right',
-                                        indicator=True)
+
+    common_right = Old_file.merge(New_file, on=columns_no_codes, how='right', indicator=True)
 
     # take new and repeated cases indexes
     new_cases_index = common_right['_merge'] == 'right_only'
