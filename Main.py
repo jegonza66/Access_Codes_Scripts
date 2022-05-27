@@ -44,7 +44,7 @@ elif process_todo == 'Low Notification':
     Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, Publishers, Titles, URLs, run = \
         Setup.low_notification(Credentials=Credentials)
     if run:
-        Report, driver = Access_Codes_process.run_low_no_notification(Credentials=Credentials,
+        Report, driver = Access_Codes_process.run_low_notification(Credentials=Credentials,
                                                                       Billing_ISBNs=Billing_ISBNs, VBIDs=VBIDs,
                                                                       quantities=quantities, Schools=Schools,
                                                                       Verba_Schools=Verba_Schools,Catalogs=Catalogs,

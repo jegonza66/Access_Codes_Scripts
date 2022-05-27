@@ -6,7 +6,7 @@ import time
 import Functions
 import Chrome_navigator
 
-def run_low_no_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, Publishers,
+def run_low_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, Publishers,
                             Titles, URLs, process_todo):
 
     # Define paths and credentials

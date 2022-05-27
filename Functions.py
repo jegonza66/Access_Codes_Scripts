@@ -112,6 +112,7 @@ def check_file(df, csv_file, quantity, URL, Title):
 
     if not pd.isna(URL):
         df['URL'] = URL
+        df.to_csv(csv_file, index=False)
 
     codes_generated = int(quantity - df['Access Code'].isnull().values.sum())
     url_generated = int(quantity - df['URL'].isnull().values.sum())
@@ -122,7 +123,7 @@ def check_file(df, csv_file, quantity, URL, Title):
         Error = 'Missing Access Codes and URL'
         if codes_generated and codes_generated == url_generated:
             Error = 'Run out of codes'
-            df = df.head(codes_generated)
+            # df = df.head(codes_generated)
         if 'eVP' in Title:
             print('eVP Title.\nChange codes column to message.')
             df['Access Code'] = 'No access code is needed for this content, ' \
@@ -135,7 +136,7 @@ def check_file(df, csv_file, quantity, URL, Title):
         Error = 'Missing Access Codes'
         if codes_generated:
             Error = 'Run out of codes'
-            df = df.head(codes_generated)
+            # df = df.head(codes_generated)
         if 'eVP' in Title:
             print('eVP Title.\nChange codes column to message.')
             df['Access Code'] = 'No access code is needed for this content, ' \
