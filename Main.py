@@ -34,8 +34,7 @@ if process_todo == 'Daily Delta':
                                                                    VBIDs=VBIDs, quantities=quantities, Schools=Schools,
                                                                    Verba_Schools=Verba_Schools,Catalogs=Catalogs,
                                                                    driver=driver,
-                                                                   process_todo=process_todo + ' Fake Code Reveal'
-                                                                   )
+                                                                   process_todo=process_todo + ' Fake Code Reveal')
     else:
         print('\nRun == False.\nLenght of ISBNs, quantities, URLs did not match. Please check excel files.')
 
@@ -45,10 +44,10 @@ elif process_todo == 'Low Notification':
         Setup.low_notification(Credentials=Credentials)
     if run:
         Report, driver = Access_Codes_process.run_low_notification(Credentials=Credentials,
-                                                                      Billing_ISBNs=Billing_ISBNs, VBIDs=VBIDs,
-                                                                      quantities=quantities, Schools=Schools,
-                                                                      Verba_Schools=Verba_Schools,Catalogs=Catalogs,
-                                                                      Publishers=Publishers, Titles=Titles, URLs=URLs,
-                                                                      process_todo=process_todo)
+                                                                   Billing_ISBNs=Billing_ISBNs, VBIDs=VBIDs,
+                                                                   quantities=quantities, Schools=Schools,
+                                                                   Verba_Schools=Verba_Schools,Catalogs=Catalogs,
+                                                                   Publishers=Publishers, Titles=Titles, URLs=URLs,
+                                                                   process_todo=process_todo)
     else:
         print('\nRun == False.\nLenght of ISBNs, quantities, URLs did not match. Please check excel files.')
