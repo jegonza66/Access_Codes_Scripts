@@ -9,13 +9,15 @@ from selenium.webdriver.common.action_chains import ActionChains
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-def verba_connect_login(my_username, my_password):
+def verba_connect_login(Credentials):
+    Verba_Username = Credentials['Verba_Username']
+    Verba_Password = Credentials['Verba_Password']
+
     # Open driver
-    # Correction for ana's webdriver manager installation requirement
-    if my_username == 'ana.torres':
+    if Verba_Username == 'ana.torres':
+        # Correction for ana's webdriver manager installation requirement
         driver = webdriver.Chrome(r"C:\Users\anita\Downloads\chromedriver_win32\chromedriver.exe")
     else:
-
         driver = webdriver.Chrome(ChromeDriverManager().install())
 
     # Open the website
@@ -25,12 +27,12 @@ def verba_connect_login(my_username, my_password):
     # Select the id box
     id_box = driver.find_element_by_id('username')
     # Send id information
-    id_box.send_keys(my_username)
+    id_box.send_keys(Verba_Username)
 
     # Find password box
     pass_box = driver.find_element_by_id('password')
     # Send password
-    pass_box.send_keys(my_password)
+    pass_box.send_keys(Verba_Password)
 
     # Find login button
     login_button_css = 'button[type="submit"]'
@@ -40,9 +42,9 @@ def verba_connect_login(my_username, my_password):
 
     # Check if successfull login
     try:
-        time.sleep(2)
         Dashboard_xpath = '/ html / body / div[1] / div / nav / div[1] / a[2]'
-        WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, Dashboard_xpath)))
+        WebDriverWait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, Dashboard_xpath)))
+        time.sleep(2)
         WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, Dashboard_xpath))).click()
     except:
         input('\nVerification step needed to complete login.\n'
