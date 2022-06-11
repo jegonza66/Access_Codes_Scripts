@@ -12,9 +12,7 @@ def run_low_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schools,
     # Define paths and credentials
     API_Key = Credentials['API_Key']
     save_path = Credentials['csv_save_path']
-    Verba_Username = Credentials['Verba_Username']
-    Verba_Password = Credentials['Verba_Password']
-    driver = Chrome_navigator.verba_connect_login(my_username=Verba_Username, my_password=Verba_Password)
+    driver = Chrome_navigator.verba_connect_login(Credentials=Credentials)
     previous_school = ''
     previous_catalog = ''
 
@@ -126,9 +124,7 @@ def run_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verb
     # Define paths and credentials
     API_Key = Credentials['API_Key']
     save_path = Credentials['csv_save_path']
-    Verba_Username = Credentials['Verba_Username']
-    Verba_Password = Credentials['Verba_Password']
-    driver = Chrome_navigator.verba_connect_login(my_username=Verba_Username, my_password=Verba_Password)
+    driver = Chrome_navigator.verba_connect_login(Credentials=Credentials)
     previous_school = ''
     previous_catalog = ''
 
