@@ -6,10 +6,7 @@ import Excel_Files_Manager
 
 def low_notification(Credentials):
     # Read cases file
-    New_file = Excel_Files_Manager.load_file()
-
-    # Ask if dismiss cases
-    New_file = Excel_Files_Manager.dismiss_repeated(New_file=New_file)
+    New_file = Excel_Files_Manager.load_low_notification_files()
 
     # Getting ready for ruby run
     Billing_ISBNs = list(New_file['Billing Isbn'].values)

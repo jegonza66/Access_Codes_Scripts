@@ -3,9 +3,10 @@ import xlrd
 import tkinter as tk
 from tkinter import filedialog
 
-def load_file():
+
+def explorer_window_load():
     # Read files
-    print('Please use the dialog window to go to the location of the Access Code Notification.xlsx file '
+    print('Please use the dialog window to go to the location of the file '
           'and open it.')
     root = tk.Tk()
     root.withdraw()
@@ -26,14 +27,17 @@ def load_file():
     return file
 
 
-def dismiss_repeated(New_file):
+def load_low_notification_files():
+    # Read Low notification file
+    New_file = explorer_window_load()
+
     # Ask if dismiss certain isbns
     Answer = input('\nWould you like to exclude any ISBNs?\n'
                    'Please answer "yes" or "no":')
     yes = {'yes', 'y', 'ye', 'YES', 'YE', 'Y'}
     if Answer in yes:
         # Ask for dismiss file
-        Old_file = load_file()
+        Old_file = explorer_window_load()
 
         columns_no_codes = ['Login', 'Name', 'Name.1', 'Title', 'Billing Isbn', 'Access Code URL']
         # mark which cases are new and repeated
