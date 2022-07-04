@@ -17,6 +17,8 @@ def API_Paths(Credentials_file = 'Credentials/Credentials.pkl'):
         Credentials['csv_save_path'] = input(
             'Please copy and paste the path to the save folder (usually the BNED folder '
             'in OneDrive).\nPath:').replace('\\', '/') + '/'
+        Credentials['Ruby_path'] = input(
+            'Please copy and paste the path to the Access-Codes folder containing Ruby.\nPath:').replace('\\', '/') + '/'
         print('Please use the dialog window to go to the location of the School_Names.xlsx file '
               'and open it.')
         # Get School_Names file
