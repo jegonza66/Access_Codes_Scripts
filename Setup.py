@@ -35,6 +35,7 @@ def low_notification(Credentials):
 
     return Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, Publishers, Titles, URLs, run
 
+
 def code_reveal(Credentials):
     # Read DD file and take Code Reveal Cases
     DD_Code_Reveal, DD = Excel_Files_Manager.Load_DD_Code_Reveal()
@@ -91,7 +92,31 @@ def fake_code_reveal(Credentials, DD):
     return Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, run
 
 
-# OLD FUUNCTIONS OUT OF USE
+def special_request():
+    # Read cases file
+    New_file = Excel_Files_Manager.load_special_request_file()
+
+    # Getting ready for ruby run
+    Billing_ISBNs = list(New_file['SKU'].values)
+    VBIDs = [Billing_ISBN if type(Billing_ISBN) == int else Billing_ISBN.split('R')[0] for Billing_ISBN in
+             Billing_ISBNs]
+
+    # Define quantities (rounding up), schools and catalogs from dataframe
+    quantities = np.array(list(New_file['Códigos a Cargar'].values)).astype(int)
+    Schools = list(New_file['College'].values)
+    Catalogs = list(New_file['Catalog'].values)
+    Publishers = list(New_file['Publisher'].values)
+
+    # Check Billing_ISBNs and VBIDs have same size
+    if len(Billing_ISBNs) == len(VBIDs) == len(quantities) == len(Schools) == len(Catalogs) == len(Publishers):
+        run = True
+    else:
+        run = False
+
+    return Billing_ISBNs, VBIDs, quantities, Schools, Catalogs, Publishers, run
+
+
+# OLD FUNCTIONS OUT OF USE
 def run_low_notification_setup_DISMISSED(Credentials):
     # Read files
     Old_file, New_file, Low_notification_old_path = Excel_Files_Manager.read_low_files()

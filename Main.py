@@ -51,3 +51,16 @@ elif process_todo == 'Low Notification':
                                                                    process_todo=process_todo)
     else:
         print('\nRun == False.\nLenght of ISBNs, quantities, URLs did not match. Please check excel files.')
+
+
+elif process_todo == 'Special request':
+    Billing_ISBNs, VBIDs, quantities, Verba_Schools, Catalogs, Publishers, run = \
+        Setup.special_request()
+    if run:
+        Report, driver = Access_Codes_process.run_special_request(Credentials=Credentials,
+                                                                   Billing_ISBNs=Billing_ISBNs, VBIDs=VBIDs,
+                                                                   quantities=quantities,
+                                                                   Verba_Schools=Verba_Schools, Catalogs=Catalogs,
+                                                                   Publishers=Publishers, process_todo=process_todo)
+    else:
+        print('\nRun == False.\nLenght of ISBNs, quantities, URLs did not match. Please check excel files.')

@@ -12,14 +12,18 @@ def choose_process():
         Answer = input('\nWhich process would you like to run?\n'
                        '1. BNED Daily Delta\n'
                        '2. Low Notification\n'
+                       '3. Special request\n'
                        'Enter the corresponding number or name and press Enter.')
 
         DD_selection = {'1', 'Daily Delta', 'dd', 'DD', 'BNED'}
         Low_notification_selection = {'2', 'low', 'Low Notification', 'no', 'low-no', 'Low-No'}
+        Freelance_request_selection = {'3', 'Special', 'special'}
         if Answer in DD_selection:
             process = 'Daily Delta'
         elif Answer in Low_notification_selection:
             process = 'Low Notification'
+        elif Answer in Freelance_request_selection:
+            process = 'Special request'
         if not process:
             print('Please select one of the options given!')
 

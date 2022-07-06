@@ -92,6 +92,29 @@ def Load_DD_Fake_Code_Reveal(DD, Case='Fake Code Reveal', columns=None):
     return DD_Code_Reveal
 
 
+def load_special_request_file():
+    print('Please use the dialog window to go to the location of the file '
+          'and open it.')
+    root = tk.Tk()
+    root.withdraw()
+    file_path = filedialog.askopenfilename()
+
+    columns = ['College', 'Catalog', 'SKU', 'estimated', 'Códigos a Cargar', 'Publisher']
+    columns_no_codes = ['College', 'Catalog', 'SKU', 'estimated', 'Publisher']
+    file = pd.read_excel(io=file_path)[columns]
+    # Drop duplicated rows
+    file.drop_duplicates(inplace=True)
+    # Take only rows with bigger number of codes needed for repeated isbn schools and catalogs
+    file = file.sort_values('Códigos a Cargar', ascending=False).drop_duplicates(columns_no_codes, keep='first')
+    # Make file ISBN columns type object (in case no ISBNS have '-' or 'R' it will be type int, and cannot compare
+    # to Old_file columns of type object)
+    file = file.astype({"SKU": str})
+    file = file.astype({"College": str})
+    file = file.astype({"Catalog": str})
+
+    return file
+
+
 # OLD FUNCTIONS OUT OF USE
 def read_low_files():
     # Read files
