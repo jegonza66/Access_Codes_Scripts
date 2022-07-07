@@ -283,7 +283,7 @@ def check_available_codes(driver, Verba_School, Catalog, ISBN, previous_school, 
                                 print('No Avalable Codes.')
                                 Available_Codes = 0
 
-    return Available_Codes, previous_school, previous_catalog
+    return Available_Codes, previous_school, previous_catalog, Catalog_Selected
 
 
 def automatic_verba_upload(driver, csv_file, Verba_School, Catalog, previous_school, previous_catalog):

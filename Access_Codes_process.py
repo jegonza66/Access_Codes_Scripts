@@ -6,6 +6,7 @@ import time
 import Functions
 import Chrome_navigator
 
+
 def run_low_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verba_Schools, Catalogs, Publishers,
                             Titles, URLs, process_todo):
 
@@ -33,7 +34,7 @@ def run_low_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schools,
         case += 1
         print('\nCase {} of {}\n{} - {} - {}'.format(case, len(Billing_ISBNs), Verba_School, Catalog, Billing_ISBN))
         File_imported = False
-        Available_codes, previous_school, previous_catalog = \
+        Available_codes, previous_school, previous_catalog, Catalog_selected = \
             Chrome_navigator.check_available_codes(driver=driver, Verba_School=Verba_School,
                                                    Catalog=Catalog, ISBN=Billing_ISBN,
                                                    previous_school=previous_school, previous_catalog=previous_catalog)
@@ -90,6 +91,9 @@ def run_low_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schools,
                 df, Error, Missing_codes = Functions.check_file(df=df, csv_file=access_codes_file, quantity=quantity,
                                                                 URL=URL, Title=Title)
 
+                if not Error and not Catalog_selected:
+                    Error = 'Catalog not found'
+
                 if (not Error) and (not Ruby_run_error):
                     # Open Verba Connect/School/Sttings and drop import
                     File_imported, previous_school, previous_catalog = \
@@ -143,7 +147,7 @@ def run_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verb
         case += 1
         print('\nCase {} of {}\n{} - {} - {}'.format(case, len(Billing_ISBNs), Verba_School, Catalog, Billing_ISBN))
         File_imported = False
-        Available_codes, previous_school, previous_catalog = \
+        Available_codes, previous_school, previous_catalog,Catalog_selected = \
             Chrome_navigator.check_available_codes(driver=driver, Verba_School=Verba_School,
                                                    Catalog=Catalog, ISBN=Billing_ISBN,
                                                    previous_school=previous_school,
@@ -187,6 +191,9 @@ def run_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verb
             # Check if Access Code file is OK
             df, Error, Missing_codes = Functions.check_file(df=df, csv_file=access_codes_file, quantity=quantity,
                                                             URL=float('nan'), Title='')
+
+            if not Error and not Catalog_selected:
+                Error = 'Catalog not found'
 
             if (not Error) and (not Ruby_run_error):
                 # Open Verba Connect/School/Sttings and drop import
@@ -235,7 +242,7 @@ def run_fake_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools,
         case += 1
         print('\nCase {} of {}\n{} - {} - {}'.format(case, len(Billing_ISBNs), Verba_School, Catalog, Billing_ISBN))
         File_imported = False
-        Available_codes, previous_school, previous_catalog = \
+        Available_codes, previous_school, previous_catalog, Catalog_selected = \
             Chrome_navigator.check_available_codes(driver=driver, Verba_School=Verba_School,
                                                    Catalog=Catalog, ISBN=Billing_ISBN,
                                                    previous_school=previous_school,
@@ -266,19 +273,23 @@ def run_fake_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools,
             file_name = 'access_codes_{}.csv'.format(Billing_ISBN)
             access_codes_file.to_csv(file_name, index=False)
 
-            # Open Verba Connect/School/Sttings and drop import
-            File_imported, previous_school, previous_catalog = \
-                Chrome_navigator.automatic_verba_upload(driver=driver, csv_file=file_name,
-                                                        Verba_School=Verba_School, Catalog=Catalog,
-                                                        previous_school=previous_school,
-                                                        previous_catalog=previous_catalog)
-            if File_imported == 'Failed Import':
-                driver.refresh()
-                time.sleep(3)
-
             Error = False
             Ruby_run_error = False
             Missing_codes = 0
+
+            if not Catalog_selected:
+                Error = 'Catalog not found'
+
+            # Open Verba Connect/School/Sttings and drop import
+            if not Error:
+                File_imported, previous_school, previous_catalog = \
+                    Chrome_navigator.automatic_verba_upload(driver=driver, csv_file=file_name,
+                                                            Verba_School=Verba_School, Catalog=Catalog,
+                                                            previous_school=previous_school,
+                                                            previous_catalog=previous_catalog)
+                if File_imported == 'Failed Import':
+                    driver.refresh()
+                    time.sleep(3)
 
             # Move access codes file to history folder
             Functions.move_csv_file(Error=Error, Check_file=Ruby_run_error, School=School, Catalog=Catalog,
@@ -319,7 +330,7 @@ def run_special_request(Credentials, Billing_ISBNs, VBIDs, quantities, Verba_Sch
         case += 1
         print('\nCase {} of {}\n{} - {} - {}'.format(case, len(Billing_ISBNs), Verba_School, Catalog, Billing_ISBN))
         File_imported = False
-        Available_codes, previous_school, previous_catalog = \
+        Available_codes, previous_school, previous_catalog, Catalog_selected = \
             Chrome_navigator.check_available_codes(driver=driver, Verba_School=Verba_School,
                                                    Catalog=Catalog, ISBN=Billing_ISBN,
                                                    previous_school=previous_school, previous_catalog=previous_catalog)
@@ -375,6 +386,9 @@ def run_special_request(Credentials, Billing_ISBNs, VBIDs, quantities, Verba_Sch
                 # Check if Access Code file is OK
                 df, Error, Missing_codes = Functions.check_file(df=df, csv_file=access_codes_file, quantity=quantity,
                                                                 URL=float('nan'), Title='')
+
+                if not Error and not Catalog_selected:
+                    Error = 'Catalog not found'
 
                 if (not Error) and (not Ruby_run_error):
                     # Open Verba Connect/School/Sttings and drop import
