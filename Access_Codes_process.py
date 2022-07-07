@@ -19,7 +19,8 @@ def run_low_notification(Credentials, Billing_ISBNs, VBIDs, quantities, Schools,
 
     # Report variable for storing information
     Report = {'OK': [], 'Failed Import': [], 'Missing Access Codes': [], 'Missing URL': [],
-              'Missing Access Codes and URL': [], 'Run out of codes': [], 'eCampus Content Holding': [], 'Dismiss': []}
+              'Missing Access Codes and URL': [], 'Run out of codes': [], 'Catalog not found': [],
+              'eCampus Content Holding': [], 'Dismiss': []}
 
     # Change directory to Access-Codes where ruby
     Functions.ruby_directory(Credentials=Credentials)
@@ -134,7 +135,8 @@ def run_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools, Verb
 
     # Report variable for storing information
     Report = {'OK': [], 'Failed Import': [], 'Missing Access Codes': [], 'Missing URL': [],
-              'Missing Access Codes and URL': [], 'Run out of codes': [], 'eCampus Content Holding': [], 'Dismiss': []}
+              'Missing Access Codes and URL': [], 'Run out of codes': [], 'Catalog not found': [],
+              'eCampus Content Holding': [], 'Dismiss': []}
 
     # Change directory to Access-Codes where ruby
     Functions.ruby_directory(Credentials=Credentials)
@@ -232,7 +234,8 @@ def run_fake_code_reveal(Credentials, Billing_ISBNs, VBIDs, quantities, Schools,
 
     # Report variable for storing information
     Report = {'OK': [], 'Failed Import': [], 'Missing Access Codes': [], 'Missing URL': [],
-              'Missing Access Codes and URL': [], 'Run out of codes': [], 'eCampus Content Holding': [], 'Dismiss': []}
+              'Missing Access Codes and URL': [], 'Run out of codes': [], 'Catalog not found': [],
+              'eCampus Content Holding': [], 'Dismiss': []}
 
     print('\n\nTotal cases: {}\n'.format(len(Billing_ISBNs)))
     # Start run for
@@ -317,7 +320,8 @@ def run_special_request(Credentials, Billing_ISBNs, VBIDs, quantities, Verba_Sch
 
     # Report variable for storing information
     Report = {'OK': [], 'Failed Import': [], 'Missing Access Codes': [], 'Missing URL': [],
-              'Missing Access Codes and URL': [], 'Run out of codes': [], 'eCampus Content Holding': [], 'Dismiss': []}
+              'Missing Access Codes and URL': [], 'Run out of codes': [], 'Catalog not found': [],
+              'eCampus Content Holding': [], 'Dismiss': []}
 
     # Change directory to Access-Codes where ruby
     Functions.ruby_directory(Credentials=Credentials)

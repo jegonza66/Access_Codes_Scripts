@@ -248,6 +248,11 @@ def write_final_report(Report, save_path, process):
         text += '\n\nThe following {} files Run out of Access Codes. Must upload and request missing codes:' \
                 '\n{}'.format(len(Report['Run out of codes']),
                               '\n'.join(str(line) for line in Report['Run out of codes']))
+    if len(Report['Catalog not found']):
+        text += '\n\nThe following {} files were not uploaded because something went wrong when looking for the School or Catalog.\n' \
+                'Must upload manually:' \
+                '\n{}'.format(len(Report['Catalog not found']),
+                              '\n'.join(str(line) for line in Report['Catalog not found']))
     if len(Report['eCampus Content Holding']):
         text += '\n\nThe following {} files have eCampus Content Holding Publisher with no available codes.' \
                 '\nContact Maka for new codes:' \
